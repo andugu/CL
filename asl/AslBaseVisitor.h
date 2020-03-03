@@ -75,6 +75,30 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitComparisonRelation(AslParser::ComparisonRelationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAndRelational(AslParser::AndRelationalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitCharValue(AslParser::CharValueContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitIntValue(AslParser::IntValueContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOrRelational(AslParser::OrRelationalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitFloatValue(AslParser::FloatValueContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -83,7 +107,7 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx) override {
+  virtual antlrcpp::Any visitParentesisExpr(AslParser::ParentesisExprContext *ctx) override {
     return visitChildren(ctx);
   }
 

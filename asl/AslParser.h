@@ -14,11 +14,11 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, ASSIGN = 7, 
     EQUAL = 8, NOTEQUAL = 9, GREATER = 10, GREATEREQUAL = 11, LESS = 12, 
-    LESSEQUAL = 13, NOT = 14, AND = 15, OR = 16, PLUS = 17, SUB = 18, DIV = 19, 
-    MUL = 20, MOD = 21, VAR = 22, INT = 23, FLOAT = 24, BOOL = 25, CHAR = 26, 
-    IF = 27, THEN = 28, ELSE = 29, ENDIF = 30, FUNC = 31, ENDFUNC = 32, 
-    READ = 33, WRITE = 34, COMMA = 35, ARRAY = 36, ID = 37, INTVAL = 38, 
-    STRING = 39, COMMENT = 40, WS = 41, OF = 42
+    LESSEQUAL = 13, NOT = 14, AND = 15, OR = 16, OF = 17, PLUS = 18, SUB = 19, 
+    DIV = 20, MUL = 21, MOD = 22, VAR = 23, INT = 24, FLOAT = 25, BOOL = 26, 
+    CHAR = 27, IF = 28, THEN = 29, ELSE = 30, ENDIF = 31, FUNC = 32, ENDFUNC = 33, 
+    READ = 34, WRITE = 35, COMMA = 36, ARRAY = 37, ID = 38, INTVAL = 39, 
+    FLOATVAL = 40, CHARVAL = 41, STRING = 42, COMMENT = 43, WS = 44
   };
 
   enum {
@@ -268,6 +268,68 @@ public:
    
   };
 
+  class  ComparisonRelationContext : public ExprContext {
+  public:
+    ComparisonRelationContext(ExprContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
+    antlr4::tree::TerminalNode *EQUAL();
+    antlr4::tree::TerminalNode *NOTEQUAL();
+    antlr4::tree::TerminalNode *LESS();
+    antlr4::tree::TerminalNode *LESSEQUAL();
+    antlr4::tree::TerminalNode *GREATER();
+    antlr4::tree::TerminalNode *GREATEREQUAL();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  AndRelationalContext : public ExprContext {
+  public:
+    AndRelationalContext(ExprContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
+    antlr4::tree::TerminalNode *AND();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  CharValueContext : public ExprContext {
+  public:
+    CharValueContext(ExprContext *ctx);
+
+    antlr4::tree::TerminalNode *CHARVAL();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  IntValueContext : public ExprContext {
+  public:
+    IntValueContext(ExprContext *ctx);
+
+    antlr4::tree::TerminalNode *INTVAL();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  OrRelationalContext : public ExprContext {
+  public:
+    OrRelationalContext(ExprContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
+    antlr4::tree::TerminalNode *OR();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  FloatValueContext : public ExprContext {
+  public:
+    FloatValueContext(ExprContext *ctx);
+
+    antlr4::tree::TerminalNode *FLOATVAL();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  ExprIdentContext : public ExprContext {
   public:
     ExprIdentContext(ExprContext *ctx);
@@ -291,21 +353,11 @@ public:
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
-  class  RelationalContext : public ExprContext {
+  class  ParentesisExprContext : public ExprContext {
   public:
-    RelationalContext(ExprContext *ctx);
+    ParentesisExprContext(ExprContext *ctx);
 
-    antlr4::Token *op = nullptr;
-    std::vector<ExprContext *> expr();
-    ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *EQUAL();
-    antlr4::tree::TerminalNode *NOTEQUAL();
-    antlr4::tree::TerminalNode *LESS();
-    antlr4::tree::TerminalNode *LESSEQUAL();
-    antlr4::tree::TerminalNode *GREATER();
-    antlr4::tree::TerminalNode *GREATEREQUAL();
-    antlr4::tree::TerminalNode *AND();
-    antlr4::tree::TerminalNode *OR();
+    ExprContext *expr();
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 

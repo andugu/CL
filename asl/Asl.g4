@@ -86,14 +86,17 @@ left_expr
         ;
 
 // Grammar for expressions with boolean, relational and aritmetic operators
-expr    : ident '[' INTVAL ']'                                                  # value
+expr    : '(' expr ')'                                                          # parentesisExpr
+        | ident '[' INTVAL ']'                                                  # value
         | (NOT|SUB|PLUS) expr                                                   # value
         | expr op=(MUL|DIV|MOD) expr                                            # arithmetic
         | expr op=(PLUS|SUB) expr                                               # arithmetic
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational
         | expr op=AND expr                                                      # relational
         | expr op=OR  expr                                                      # relational
-        | INTVAL                                                                # value
+        | INTVAL                                                                # intValue
+        | FLOATVAL                                                              # floatValue
+        | CHARVAL                                                               # charValue
         | ident                                                                 # exprIdent
         ;
 
@@ -116,6 +119,8 @@ NOT            : 'not';
 AND            : 'and';
 OR             : 'or';
 
+
+OF             : 'of';
 
 // ARITHMETIC OPERATORS 
 PLUS      : '+' ;
@@ -140,7 +145,12 @@ WRITE     : 'write' ;
 COMMA     : ',';
 ARRAY     : 'array';
 ID        : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ;
+
+// VALUES 
 INTVAL    : ('0'..'9')+ ;
+FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')* 
+            | '.'  ('0'..'9')+; 
+CHARVAL   : '\'' (ESC_SEQ | ~('\\'|'"')) '\'';
 
 // Strings (in quotes) with escape sequences
 STRING    : '"' ( ESC_SEQ | ~('\\'|'"') )* '"' ;

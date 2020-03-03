@@ -268,33 +268,6 @@ public:
    
   };
 
-  class  ComparisonRelationContext : public ExprContext {
-  public:
-    ComparisonRelationContext(ExprContext *ctx);
-
-    antlr4::Token *op = nullptr;
-    std::vector<ExprContext *> expr();
-    ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *EQUAL();
-    antlr4::tree::TerminalNode *NOTEQUAL();
-    antlr4::tree::TerminalNode *LESS();
-    antlr4::tree::TerminalNode *LESSEQUAL();
-    antlr4::tree::TerminalNode *GREATER();
-    antlr4::tree::TerminalNode *GREATEREQUAL();
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-  };
-
-  class  AndRelationalContext : public ExprContext {
-  public:
-    AndRelationalContext(ExprContext *ctx);
-
-    antlr4::Token *op = nullptr;
-    std::vector<ExprContext *> expr();
-    ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *AND();
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-  };
-
   class  CharValueContext : public ExprContext {
   public:
     CharValueContext(ExprContext *ctx);
@@ -308,17 +281,6 @@ public:
     IntValueContext(ExprContext *ctx);
 
     antlr4::tree::TerminalNode *INTVAL();
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-  };
-
-  class  OrRelationalContext : public ExprContext {
-  public:
-    OrRelationalContext(ExprContext *ctx);
-
-    antlr4::Token *op = nullptr;
-    std::vector<ExprContext *> expr();
-    ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *OR();
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
@@ -353,6 +315,25 @@ public:
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  RelationalContext : public ExprContext {
+  public:
+    RelationalContext(ExprContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    antlr4::tree::TerminalNode *NOT();
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
+    antlr4::tree::TerminalNode *EQUAL();
+    antlr4::tree::TerminalNode *NOTEQUAL();
+    antlr4::tree::TerminalNode *LESS();
+    antlr4::tree::TerminalNode *LESSEQUAL();
+    antlr4::tree::TerminalNode *GREATER();
+    antlr4::tree::TerminalNode *GREATEREQUAL();
+    antlr4::tree::TerminalNode *AND();
+    antlr4::tree::TerminalNode *OR();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  ParentesisExprContext : public ExprContext {
   public:
     ParentesisExprContext(ExprContext *ctx);
@@ -368,9 +349,8 @@ public:
     IdentContext *ident();
     antlr4::tree::TerminalNode *INTVAL();
     ExprContext *expr();
-    antlr4::tree::TerminalNode *NOT();
-    antlr4::tree::TerminalNode *SUB();
     antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *SUB();
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 

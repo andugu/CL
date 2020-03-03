@@ -49,21 +49,17 @@ public:
 
     virtual antlrcpp::Any visitLeft_expr(AslParser::Left_exprContext *context) = 0;
 
-    virtual antlrcpp::Any visitComparisonRelation(AslParser::ComparisonRelationContext *context) = 0;
-
-    virtual antlrcpp::Any visitAndRelational(AslParser::AndRelationalContext *context) = 0;
-
     virtual antlrcpp::Any visitCharValue(AslParser::CharValueContext *context) = 0;
 
     virtual antlrcpp::Any visitIntValue(AslParser::IntValueContext *context) = 0;
-
-    virtual antlrcpp::Any visitOrRelational(AslParser::OrRelationalContext *context) = 0;
 
     virtual antlrcpp::Any visitFloatValue(AslParser::FloatValueContext *context) = 0;
 
     virtual antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *context) = 0;
 
     virtual antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *context) = 0;
+
+    virtual antlrcpp::Any visitRelational(AslParser::RelationalContext *context) = 0;
 
     virtual antlrcpp::Any visitParentesisExpr(AslParser::ParentesisExprContext *context) = 0;
 

@@ -88,7 +88,8 @@ left_expr
 // Grammar for expressions with boolean, relational and aritmetic operators
 expr    : '(' expr ')'                                                          # parentesisExpr
         | ident '[' INTVAL ']'                                                  # value
-        | (NOT|SUB|PLUS) expr                                                   # value
+        | NOT expr                                                              # relational
+        | (PLUS | SUB) expr                                                         # value
         | expr op=(MUL|DIV|MOD) expr                                            # arithmetic
         | expr op=(PLUS|SUB) expr                                               # arithmetic
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational

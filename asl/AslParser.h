@@ -364,6 +364,17 @@ public:
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  NegateNumContext : public ExprContext {
+  public:
+    NegateNumContext(ExprContext *ctx);
+
+    ExprContext *expr();
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *SUB();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  ParentesisExprContext : public ExprContext {
   public:
     ParentesisExprContext(ExprContext *ctx);
@@ -379,9 +390,6 @@ public:
 
     IdentContext *ident();
     antlr4::tree::TerminalNode *INTVAL();
-    ExprContext *expr();
-    antlr4::tree::TerminalNode *PLUS();
-    antlr4::tree::TerminalNode *SUB();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };

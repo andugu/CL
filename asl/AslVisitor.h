@@ -63,6 +63,8 @@ public:
 
     virtual antlrcpp::Any visitRelational(AslParser::RelationalContext *context) = 0;
 
+    virtual antlrcpp::Any visitNegateNum(AslParser::NegateNumContext *context) = 0;
+
     virtual antlrcpp::Any visitParentesisExpr(AslParser::ParentesisExprContext *context) = 0;
 
     virtual antlrcpp::Any visitValue(AslParser::ValueContext *context) = 0;

@@ -1025,6 +1025,29 @@ antlrcpp::Any AslParser::RelationalContext::accept(tree::ParseTreeVisitor *visit
   else
     return visitor->visitChildren(this);
 }
+//----------------- NegateNumContext ------------------------------------------------------------------
+
+AslParser::ExprContext* AslParser::NegateNumContext::expr() {
+  return getRuleContext<AslParser::ExprContext>(0);
+}
+
+tree::TerminalNode* AslParser::NegateNumContext::PLUS() {
+  return getToken(AslParser::PLUS, 0);
+}
+
+tree::TerminalNode* AslParser::NegateNumContext::SUB() {
+  return getToken(AslParser::SUB, 0);
+}
+
+AslParser::NegateNumContext::NegateNumContext(ExprContext *ctx) { copyFrom(ctx); }
+
+
+antlrcpp::Any AslParser::NegateNumContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<AslVisitor*>(visitor))
+    return parserVisitor->visitNegateNum(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- ParentesisExprContext ------------------------------------------------------------------
 
 AslParser::ExprContext* AslParser::ParentesisExprContext::expr() {
@@ -1048,18 +1071,6 @@ AslParser::IdentContext* AslParser::ValueContext::ident() {
 
 tree::TerminalNode* AslParser::ValueContext::INTVAL() {
   return getToken(AslParser::INTVAL, 0);
-}
-
-AslParser::ExprContext* AslParser::ValueContext::expr() {
-  return getRuleContext<AslParser::ExprContext>(0);
-}
-
-tree::TerminalNode* AslParser::ValueContext::PLUS() {
-  return getToken(AslParser::PLUS, 0);
-}
-
-tree::TerminalNode* AslParser::ValueContext::SUB() {
-  return getToken(AslParser::SUB, 0);
 }
 
 AslParser::ValueContext::ValueContext(ExprContext *ctx) { copyFrom(ctx); }
@@ -1137,7 +1148,7 @@ AslParser::ExprContext* AslParser::expr(int precedence) {
     }
 
     case 4: {
-      _localctx = _tracker.createInstance<ValueContext>(_localctx);
+      _localctx = _tracker.createInstance<NegateNumContext>(_localctx);
       _ctx = _localctx;
       previousContext = _localctx;
       setState(115);

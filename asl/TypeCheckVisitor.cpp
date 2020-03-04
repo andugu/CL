@@ -191,6 +191,10 @@ antlrcpp::Any TypeCheckVisitor::visitWriteExpr(AslParser::WriteExprContext *ctx)
 //   return r;
 // }
 
+/**************************
+		VISIT EXPRESSIONS
+***************************/
+
 antlrcpp::Any TypeCheckVisitor::visitLeft_expr(AslParser::Left_exprContext *ctx) {
   DEBUG_ENTER();
   visit(ctx->ident());
@@ -235,7 +239,28 @@ antlrcpp::Any TypeCheckVisitor::visitRelational(AslParser::RelationalContext *ct
   return 0;
 }
 
+antlrcpp::Any TypeCheckVisitor::visitParentesisExpr(AslParser::ParentesisExprContext *ctx) {
+  DEBUG_ENTER();// TODO => value = array value
+  visit(ctx->expr());
+  DEBUG_EXIT();
+  return 0;
+}
+
 antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
+  DEBUG_ENTER();// TODO => value = array value
+  
+  DEBUG_EXIT();
+  return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitNegateNum(AslParser::NegateNumContext *ctx) {
+  DEBUG_ENTER();
+  visit(ctx->expr());
+  DEBUG_EXIT();
+  return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitIntValue(AslParser::IntValueContext *ctx) {
   DEBUG_ENTER();
   TypesMgr::TypeId t = Types.createIntegerTy();
   putTypeDecor(ctx, t);
@@ -243,6 +268,25 @@ antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
   DEBUG_EXIT();
   return 0;
 }
+
+antlrcpp::Any TypeCheckVisitor::visitFloatValue(AslParser::FloatValueContext *ctx) {
+  DEBUG_ENTER();
+  TypesMgr::TypeId t = Types.createFloatTy();
+  putTypeDecor(ctx, t);
+  putIsLValueDecor(ctx, false);
+  DEBUG_EXIT();
+  return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitCharValue(AslParser::CharValueContext *ctx) {
+  DEBUG_ENTER();
+  TypesMgr::TypeId t = Types.createCharacterTy();
+  putTypeDecor(ctx, t);
+  putIsLValueDecor(ctx, false);
+  DEBUG_EXIT();
+  return 0;
+}
+
 
 antlrcpp::Any TypeCheckVisitor::visitExprIdent(AslParser::ExprIdentContext *ctx) {
   DEBUG_ENTER();
@@ -275,6 +319,50 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   DEBUG_EXIT();
   return 0;
 }
+
+antlrcpp::Any TypeCheckVisitor::visitArrayType(AslParser::ArrayTypeContext *ctx) {
+  DEBUG_ENTER();
+  TypesMgr::TypeId t = Types.createArrayTy(std::stoi(ctx->INTVAL()->getText()), Types.createIntegerTy());
+  putTypeDecor(ctx, t);
+  DEBUG_EXIT();
+  return 0;
+}
+
+
+antlrcpp::Any TypeCheckVisitor::visitBasicType(AslParser::BasicTypeContext *ctx) {
+  DEBUG_ENTER();
+  visit(ctx->type2());
+  DEBUG_EXIT();
+  return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitType2(AslParser::Type2Context *ctx) {
+  DEBUG_ENTER();
+  if (ctx->INT()) {
+    TypesMgr::TypeId t = Types.createIntegerTy();
+    putTypeDecor(ctx, t);
+  }
+  else if(ctx->FLOAT()){
+    TypesMgr::TypeId t = Types.createFloatTy();
+    putTypeDecor(ctx, t);
+  }
+  else if(ctx->BOOL()){
+    TypesMgr::TypeId t = Types.createBooleanTy();
+    putTypeDecor(ctx, t);
+  }
+  else if(ctx->CHAR()){
+    TypesMgr::TypeId t = Types.createCharacterTy();
+    putTypeDecor(ctx, t);
+  }
+  DEBUG_EXIT();
+  return 0;
+}
+
+/**************************
+	END	VISIT EXPRESSIONS
+***************************/
+
+
 
 
 // Getters for the necessary tree node atributes:

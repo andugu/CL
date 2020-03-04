@@ -103,6 +103,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitNegateNum(AslParser::NegateNumContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitParentesisExpr(AslParser::ParentesisExprContext *ctx) override {
     return visitChildren(ctx);
   }

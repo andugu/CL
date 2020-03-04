@@ -89,7 +89,7 @@ left_expr
 expr    : '(' expr ')'                                                          # parentesisExpr
         | ident '[' INTVAL ']'                                                  # value
         | NOT expr                                                              # singleRelational
-        | (PLUS | SUB) expr                                                     # value
+        | (PLUS | SUB) expr                                                     # negateNum
         | expr op=(MUL|DIV|MOD) expr                                            # arithmetic
         | expr op=(PLUS|SUB) expr                                               # arithmetic
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational

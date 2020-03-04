@@ -78,8 +78,8 @@ ANTLR4FLAGS += -o $(GENDIR)
 endif
 
 # The root directory of your antlr4 runtime is ...
-#ANTLR_ROOT := /usr/local
-ANTLR_ROOT := /assig/cl/runtime
+ANTLR_ROOT := /usr/local
+#ANTLR_ROOT := /assig/cl/runtime
 
 # Where to find various parts of the runtime files
 INCDIR		:= $(ANTLR_ROOT)/include/antlr4-runtime/
@@ -232,7 +232,7 @@ pristine	: realclean
 
 # How to make or update the generated files
 $(NEEDED)		 	: $(GRAMMAR).g4
-	@echo "## Creating the antlr generated files"
+	@echo "## Creating the antl-I/usr/local/include/antlr4-runtime/r generated files"
 	$(ANTLR4) $(ANTLR4FLAGS) $(GRAMMAR).g4
 $(TOKENS)			:
 	@echo "## You should first do: make antlr"; exit 1

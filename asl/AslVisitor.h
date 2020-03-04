@@ -1,5 +1,5 @@
 
-// Generated from Asl.g4 by ANTLR 4.7.1
+// Generated from Asl.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -58,6 +58,8 @@ public:
     virtual antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *context) = 0;
 
     virtual antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *context) = 0;
+
+    virtual antlrcpp::Any visitSingleRelational(AslParser::SingleRelationalContext *context) = 0;
 
     virtual antlrcpp::Any visitRelational(AslParser::RelationalContext *context) = 0;
 

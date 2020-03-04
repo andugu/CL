@@ -1,5 +1,5 @@
 
-// Generated from Asl.g4 by ANTLR 4.7.1
+// Generated from Asl.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -92,6 +92,10 @@ public:
   }
 
   virtual antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitSingleRelational(AslParser::SingleRelationalContext *ctx) override {
     return visitChildren(ctx);
   }
 

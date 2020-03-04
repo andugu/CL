@@ -63,8 +63,8 @@ TypeCheckVisitor::TypeCheckVisitor(TypesMgr       & Types,
 antlrcpp::Any TypeCheckVisitor::visitProgram(AslParser::ProgramContext *ctx) {
   DEBUG_ENTER();
   SymTable::ScopeId sc = getScopeDecor(ctx);
-  Symbols.pushThisScope(sc);  
-  for (auto ctxFunc : ctx->function()) { 
+  Symbols.pushThisScope(sc);
+  for (auto ctxFunc : ctx->function()) {
     visit(ctxFunc);
   }
   if (Symbols.noMainProperlyDeclared())
@@ -79,7 +79,7 @@ antlrcpp::Any TypeCheckVisitor::visitFunction(AslParser::FunctionContext *ctx) {
   DEBUG_ENTER();
   SymTable::ScopeId sc = getScopeDecor(ctx);
   Symbols.pushThisScope(sc);
-  // Symbols.print();
+  //Symbols.print();
   visit(ctx->statements());
   Symbols.popScope();
   DEBUG_EXIT();
@@ -127,6 +127,16 @@ antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ct
     Errors.nonReferenceableLeftExpr(ctx->left_expr());
   DEBUG_EXIT();
   return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitSingleRelational(AslParser::SingleRelationalContext *ctx){
+	DEBUG_ENTER();
+	visit(ctx->expr());
+	TypesMgr::TypeId t1 = getTypeDecor(ctx->expr());
+	if ((not Types.isErrorTy(t1)) and (not Types.isBooleanTy(t1)))
+	  Errors.booleanRequired(ctx);
+	DEBUG_EXIT();
+	return 0;
 }
 
 antlrcpp::Any TypeCheckVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {

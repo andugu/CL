@@ -88,8 +88,8 @@ left_expr
 // Grammar for expressions with boolean, relational and aritmetic operators
 expr    : '(' expr ')'                                                          # parentesisExpr
         | ident '[' INTVAL ']'                                                  # value
-        | NOT expr                                                              # relational
-        | (PLUS | SUB) expr                                                         # value
+        | NOT expr                                                              # singleRelational
+        | (PLUS | SUB) expr                                                     # value
         | expr op=(MUL|DIV|MOD) expr                                            # arithmetic
         | expr op=(PLUS|SUB) expr                                               # arithmetic
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational
@@ -108,7 +108,7 @@ ident   : ID
 /// Lexer Rules
 //////////////////////////////////////////////////
 
-// BOOLEAN OPERATORS 
+// BOOLEAN OPERATORS
 ASSIGN         : '=' ;
 EQUAL          : '==' ;
 NOTEQUAL       : '!=' ;
@@ -123,7 +123,7 @@ OR             : 'or';
 
 OF             : 'of';
 
-// ARITHMETIC OPERATORS 
+// ARITHMETIC OPERATORS
 PLUS      : '+' ;
 SUB       : '-' ;
 DIV       : '/' ;
@@ -147,10 +147,10 @@ COMMA     : ',';
 ARRAY     : 'array';
 ID        : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ;
 
-// VALUES 
+// VALUES
 INTVAL    : ('0'..'9')+ ;
-FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')* 
-            | '.'  ('0'..'9')+; 
+FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')*
+            | '.'  ('0'..'9')+;
 CHARVAL   : '\'' (ESC_SEQ | ~('\\'|'"')) '\'';
 
 // Strings (in quotes) with escape sequences

@@ -67,7 +67,7 @@ antlrcpp::Any SymbolsVisitor::visitProgram(AslParser::ProgramContext *ctx) {
   DEBUG_ENTER();
   SymTable::ScopeId sc = Symbols.pushNewScope("$global$");
   putScopeDecor(ctx, sc);
-  for (auto ctxFunc : ctx->function()) { 
+  for (auto ctxFunc : ctx->function()) {
     visit(ctxFunc);
   }
   // Symbols.print();
@@ -101,13 +101,13 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
 /**
   VISIT VALUES
 */
-
+/*
 antlrcpp::Any SymbolsVisitor::visitIntValue(AslParser::IntValueContext *ctx) {
   DEBUG_ENTER();
 
   DEBUG_EXIT();
   return std::stoi(ctx->INTVAL()->getText());
-}
+}*/
 
 
 antlrcpp::Any SymbolsVisitor::visitDeclarations(AslParser::DeclarationsContext *ctx) {

@@ -120,12 +120,7 @@ antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ct
   visit(ctx->expr());
   TypesMgr::TypeId t1 = getTypeDecor(ctx->left_expr());
   TypesMgr::TypeId t2 = getTypeDecor(ctx->expr());
-	std::cout << "Line: " << ctx->getStart()->getLine() << std::endl;
-	Types.dump(t1);
 
-	std::cout << std::endl;
-	Types.dump(t2);
-	std::cout << std::endl;
   if ((not Types.isErrorTy(t1)) and (not Types.isErrorTy(t2)) and (not Types.copyableTypes(t1, t2)))
     Errors.incompatibleAssignment(ctx->ASSIGN());
   if ((not Types.isErrorTy(t1)) and (not getIsLValueDecor(ctx->left_expr())))
@@ -324,7 +319,6 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   DEBUG_ENTER();
   std::string ident = ctx->getText();
   if (Symbols.findInStack(ident) == -1) {
-		std::cout << "Not declared" << std::endl;
     Errors.undeclaredIdent(ctx->ID());
     TypesMgr::TypeId te = Types.createErrorTy();
     putTypeDecor(ctx, te);
@@ -333,7 +327,6 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   else {
     TypesMgr::TypeId t1 = Symbols.getType(ident);
     putTypeDecor(ctx, t1);
-		std::cout << "declared " << Types.to_string(t1) << std::endl;
 
     if (Symbols.isFunctionClass(ident))
       putIsLValueDecor(ctx, false);

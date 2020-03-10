@@ -38,7 +38,15 @@ program : function+ EOF
 
 // A function has a name, a list of parameters and a list of statements
 function
-        : FUNC ID '(' ')' declarations statements ENDFUNC
+        : FUNC ID '(' parameters ')' ret declarations statements ENDFUNC
+        ;
+
+parameters
+        : (ID ':' type (COMMA ID ':' type)*)?
+        ;
+
+ret
+        : (':' type)?
         ;
 
 declarations
@@ -59,7 +67,6 @@ type    : type2                          # BasicType
         | ARRAY '[' INTVAL ']' OF type2  # ArrayType
         ;
 
-
 statements
         : (statement)*
         ;
@@ -71,13 +78,17 @@ statement
           // if-then-else statement (else is optional)
         | IF expr THEN statements ENDIF       # ifStmt
           // A function/procedure call has a list of arguments in parenthesis (possibly empty)
-        | ident '(' ')' ';'                   # procCall
+        | ident '(' (ID (COMMA ID)*)? ')' ';' # procCall
+          // While statement
+        | WHILE expr DO statements ENDWHILE   # whileStmt 
           // Read a variable
         | READ left_expr ';'                  # readStmt
           // Write an expression
         | WRITE expr ';'                      # writeExpr
           // Write a string
         | WRITE STRING ';'                    # writeString
+          // Return stmnt
+        | RETURN (expr)? ';'                  # returnStmt
         ;
 
 // Grammar for left expressions (l-values in C++)
@@ -110,19 +121,17 @@ ident   : ID
 //////////////////////////////////////////////////
 
 // BOOLEAN OPERATORS
-ASSIGN         : '=' ;
+ASSIGN         : '='  ;
 EQUAL          : '==' ;
 NOTEQUAL       : '!=' ;
-GREATER        : '>' ;
+GREATER        : '>'  ;
 GREATEREQUAL   : '>=' ;
-LESS           : '<' ;
+LESS           : '<'  ;
 LESSEQUAL      : '<=' ;
 NOT            : 'not';
 AND            : 'and';
-OR             : 'or';
-
-
-OF             : 'of';
+OR             : 'or' ;
+OF             : 'of' ;
 
 // ARITHMETIC OPERATORS
 PLUS      : '+' ;
@@ -131,28 +140,33 @@ DIV       : '/' ;
 MUL       : '*' ;
 MOD       : '%' ;
 
-VAR       : 'var';
-INT       : 'int';
-FLOAT     : 'float';
-BOOL      : 'bool';
-CHAR      : 'char';
-IF        : 'if' ;
-THEN      : 'then' ;
-ELSE      : 'else' ;
-ENDIF     : 'endif' ;
-FUNC      : 'func' ;
+VAR       : 'var'     ;
+INT       : 'int'     ;
+FLOAT     : 'float'   ;
+BOOL      : 'bool'    ;
+CHAR      : 'char'    ;
+IF        : 'if'      ;
+THEN      : 'then'    ;
+ELSE      : 'else'    ;
+ENDIF     : 'endif'   ;
+FUNC      : 'func'    ;
 ENDFUNC   : 'endfunc' ;
-READ      : 'read' ;
-WRITE     : 'write' ;
-COMMA     : ',';
-ARRAY     : 'array';
+READ      : 'read'    ;
+WRITE     : 'write'   ;
+COMMA     : ','       ;
+RETURN    : 'return'  ;
+ARRAY     : 'array'   ;
+WHILE     : 'while'   ;
+DO        : 'do'      ;
+ENDWHILE  : 'endwhile';
 ID        : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ;
 
 // VALUES
 INTVAL    : ('0'..'9')+ ;
-FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')*
-            | '.'  ('0'..'9')+;
-BOOLVAL   : 'true' | 'false';
+FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')* 
+          | '.'  ('0'..'9')+;
+BOOLVAL   : 'true' 
+          | 'false';
 CHARVAL   : '\'' (ESC_SEQ | ~('\\'|'"')) '\'';
 
 // Strings (in quotes) with escape sequences

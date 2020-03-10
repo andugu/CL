@@ -77,15 +77,25 @@ ifneq ($(strip $(GENDIR) ),)
 ANTLR4FLAGS += -o $(GENDIR)
 endif
 
+
+### ANTLR SOURCE FOLDER ###
+
+## PER AL LAB ##
 # The root directory of your antlr4 runtime is ...
-#ANTLR_ROOT := /usr/local
-ANTLR_ROOT := /assig/cl/runtime
+#ANTLR_ROOT := /assig/cl/runtime
+#ANTLR_ROOT_BIN := /assig/cl/runtime
+
+## PER AL MAC DEL PEPE ##
+# The root directory of your antlr4 runtime is ...
+ANTLR_ROOT := /usr/local/Cellar/antlr4-cpp-runtime/4.8
+ANTLR_ROOT_BIN := /usr/local/Cellar/antlr/4.8_1
+
 
 # Where to find various parts of the runtime files
 INCDIR		:= $(ANTLR_ROOT)/include/antlr4-runtime/
 LIBDIR		:= $(ANTLR_ROOT)/lib/
-BINDIR		:= $(ANTLR_ROOT)/bin
-ANTLR4		:= $(BINDIR)/antlr4
+BINDIR		:= $(ANTLR_ROOT_BIN)/bin
+ANTLR4		:= $(BINDIR)/antlr
 
 # The minimal set of generated files needed for any grammar.
 ifneq ($(strip $(GENDIR) ),)	# if GENDIR was defined

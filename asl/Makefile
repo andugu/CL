@@ -95,6 +95,9 @@ ANTLR_ROOT_BIN := /usr/local/Cellar/antlr/4.8_1
 INCDIR		:= $(ANTLR_ROOT)/include/antlr4-runtime/
 LIBDIR		:= $(ANTLR_ROOT)/lib/
 BINDIR		:= $(ANTLR_ROOT_BIN)/bin
+## LAB
+#ANTLR4		:= $(BINDIR)/antlr4
+## MAC PEPE
 ANTLR4		:= $(BINDIR)/antlr
 
 # The minimal set of generated files needed for any grammar.

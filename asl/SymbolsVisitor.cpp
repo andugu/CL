@@ -48,7 +48,6 @@
 
 // using namespace std;
 
-
 // Constructor
 SymbolsVisitor::SymbolsVisitor(TypesMgr       & Types,
 			       SymTable       & Symbols,
@@ -59,7 +58,6 @@ SymbolsVisitor::SymbolsVisitor(TypesMgr       & Types,
   Decorations{Decorations},
   Errors{Errors} {
 }
-
 
 // Methods to visit each kind of node:
 //
@@ -98,18 +96,6 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
   return 0;
 }
 
-/**
-  VISIT VALUES
-*/
-/*
-antlrcpp::Any SymbolsVisitor::visitIntValue(AslParser::IntValueContext *ctx) {
-  DEBUG_ENTER();
-
-  DEBUG_EXIT();
-  return std::stoi(ctx->INTVAL()->getText());
-}*/
-
-
 antlrcpp::Any SymbolsVisitor::visitDeclarations(AslParser::DeclarationsContext *ctx) {
   DEBUG_ENTER();
   visitChildren(ctx);
@@ -123,11 +109,14 @@ antlrcpp::Any SymbolsVisitor::visitVariable_decl(AslParser::Variable_declContext
   for(auto const& id : ctx->ID()){
     std::string ident = id->getText();
     if (Symbols.findInCurrentScope(ident)) {
+			std::cout << "Already declared" << std::endl;
       Errors.declaredIdent(id);
     }
     else {
+
       TypesMgr::TypeId t1 = getTypeDecor(ctx->type());
-      Symbols.addLocalVar(ident, t1);
+			std::cout << "Types " << Types.to_string(t1) << std::endl;
+			Symbols.addLocalVar(ident, t1);
     }
   }
 
@@ -135,99 +124,53 @@ antlrcpp::Any SymbolsVisitor::visitVariable_decl(AslParser::Variable_declContext
   return 0;
 }
 
+antlrcpp::Any SymbolsVisitor::visitArrayType(AslParser::ArrayTypeContext *ctx) {
+  DEBUG_ENTER();
+	visit(ctx->type2());
+	TypesMgr::TypeId t1 = getTypeDecor(ctx->type2());
+  TypesMgr::TypeId t = Types.createArrayTy(std::stoi(ctx->INTVAL()->getText()), t1);
+  putTypeDecor(ctx, t);
+  DEBUG_EXIT();
+  return 0;
+}
 
+antlrcpp::Any SymbolsVisitor::visitBasicType(AslParser::BasicTypeContext *ctx) {
+  DEBUG_ENTER();
+  visit(ctx->type2());
+	auto t1 = getTypeDecor(ctx->type2());
+	putTypeDecor(ctx, t1);
+  DEBUG_EXIT();
+  return 0;
+}
 
-// antlrcpp::Any SymbolsVisitor::visitStatements(AslParser::StatementsContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitProcCall(AslParser::ProcCallContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitWriteExpr(AslParser::WriteExprContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitWriteString(AslParser::WriteStringContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitLeft_expr(AslParser::Left_exprContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitExprIdent(AslParser::ExprIdentContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitArithmetic(AslParser::ArithmeticContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitRelational(AslParser::RelationalContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitValue(AslParser::ValueContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
-// antlrcpp::Any SymbolsVisitor::visitIdent(AslParser::IdentContext *ctx) {
-//   DEBUG_ENTER();
-//   antlrcpp::Any r = visitChildren(ctx);
-//   DEBUG_EXIT();
-//   return r;
-// }
-
+antlrcpp::Any SymbolsVisitor::visitType2(AslParser::Type2Context *ctx) {
+  DEBUG_ENTER();
+  if (ctx->INT()) {
+		std::cout << "Variable is an int :)" << std::endl;
+    TypesMgr::TypeId t = Types.createIntegerTy();
+    putTypeDecor(ctx, t);
+  }
+  else if(ctx->FLOAT()){
+		std::cout << "Variable is a float :)" << std::endl;
+    TypesMgr::TypeId t = Types.createFloatTy();
+    putTypeDecor(ctx, t);
+  }
+  else if(ctx->BOOL()){
+		std::cout << "Variable is a bool :)" << std::endl;
+    TypesMgr::TypeId t = Types.createBooleanTy();
+    putTypeDecor(ctx, t);
+  }
+  else if(ctx->CHAR()){
+		std::cout << "Variable is a char :)" << std::endl;
+    TypesMgr::TypeId t = Types.createCharacterTy();
+    putTypeDecor(ctx, t);
+  }
+	else{
+		std::cout << "Variable is a nothing :(" << std::endl;
+	}
+  DEBUG_EXIT();
+  return 0;
+}
 
 // Getters for the necessary tree node atributes:
 //   Scope and Type

@@ -96,6 +96,7 @@ expr    : '(' expr ')'                                                          
         | expr op=AND expr                                                      # relational
         | expr op=OR  expr                                                      # relational
         | INTVAL                                                                # intValue
+        | BOOLVAL                                                               # boolValue
         | FLOATVAL                                                              # floatValue
         | CHARVAL                                                               # charValue
         | ident                                                                 # exprIdent
@@ -151,6 +152,7 @@ ID        : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ;
 INTVAL    : ('0'..'9')+ ;
 FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')*
             | '.'  ('0'..'9')+;
+BOOLVAL   : 'true' | 'false';
 CHARVAL   : '\'' (ESC_SEQ | ~('\\'|'"')) '\'';
 
 // Strings (in quotes) with escape sequences

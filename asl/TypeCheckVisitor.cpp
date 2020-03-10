@@ -41,7 +41,7 @@
 #include <string>
 
 // uncomment the following line to enable debugging messages with DEBUG*
-#define DEBUG_BUILD
+// #define DEBUG_BUILD
 #include "../common/debug.h"
 
 // using namespace std;
@@ -120,8 +120,13 @@ antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ct
   visit(ctx->expr());
   TypesMgr::TypeId t1 = getTypeDecor(ctx->left_expr());
   TypesMgr::TypeId t2 = getTypeDecor(ctx->expr());
-  if ((not Types.isErrorTy(t1)) and (not Types.isErrorTy(t2)) and
-      (not Types.copyableTypes(t1, t2)))
+	std::cout << "Line: " << ctx->getStart()->getLine() << std::endl;
+	Types.dump(t1);
+
+	std::cout << std::endl;
+	Types.dump(t2);
+	std::cout << std::endl;
+  if ((not Types.isErrorTy(t1)) and (not Types.isErrorTy(t2)) and (not Types.copyableTypes(t1, t2)))
     Errors.incompatibleAssignment(ctx->ASSIGN());
   if ((not Types.isErrorTy(t1)) and (not getIsLValueDecor(ctx->left_expr())))
     Errors.nonReferenceableLeftExpr(ctx->left_expr());
@@ -248,7 +253,7 @@ antlrcpp::Any TypeCheckVisitor::visitParentesisExpr(AslParser::ParentesisExprCon
 
 antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
   DEBUG_ENTER();// TODO => value = array value
-  
+
   DEBUG_EXIT();
   return 0;
 }
@@ -256,6 +261,14 @@ antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
 antlrcpp::Any TypeCheckVisitor::visitNegateNum(AslParser::NegateNumContext *ctx) {
   DEBUG_ENTER();
   visit(ctx->expr());
+  DEBUG_EXIT();
+  return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitExpr(AslParser::ExprContext *ctx) {
+  DEBUG_ENTER();
+  visitChildren(ctx);
+
   DEBUG_EXIT();
   return 0;
 }
@@ -287,6 +300,14 @@ antlrcpp::Any TypeCheckVisitor::visitCharValue(AslParser::CharValueContext *ctx)
   return 0;
 }
 
+antlrcpp::Any TypeCheckVisitor::visitBoolValue(AslParser::BoolValueContext *ctx) {
+  DEBUG_ENTER();
+  TypesMgr::TypeId t = Types.createBooleanTy();
+  putTypeDecor(ctx, t);
+  putIsLValueDecor(ctx, false);
+  DEBUG_EXIT();
+  return 0;
+}
 
 antlrcpp::Any TypeCheckVisitor::visitExprIdent(AslParser::ExprIdentContext *ctx) {
   DEBUG_ENTER();
@@ -303,6 +324,7 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   DEBUG_ENTER();
   std::string ident = ctx->getText();
   if (Symbols.findInStack(ident) == -1) {
+		std::cout << "Not declared" << std::endl;
     Errors.undeclaredIdent(ctx->ID());
     TypesMgr::TypeId te = Types.createErrorTy();
     putTypeDecor(ctx, te);
@@ -311,6 +333,8 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   else {
     TypesMgr::TypeId t1 = Symbols.getType(ident);
     putTypeDecor(ctx, t1);
+		std::cout << "declared " << Types.to_string(t1) << std::endl;
+
     if (Symbols.isFunctionClass(ident))
       putIsLValueDecor(ctx, false);
     else
@@ -320,43 +344,7 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   return 0;
 }
 
-antlrcpp::Any TypeCheckVisitor::visitArrayType(AslParser::ArrayTypeContext *ctx) {
-  DEBUG_ENTER();
-  TypesMgr::TypeId t = Types.createArrayTy(std::stoi(ctx->INTVAL()->getText()), Types.createIntegerTy());
-  putTypeDecor(ctx, t);
-  DEBUG_EXIT();
-  return 0;
-}
 
-
-antlrcpp::Any TypeCheckVisitor::visitBasicType(AslParser::BasicTypeContext *ctx) {
-  DEBUG_ENTER();
-  visit(ctx->type2());
-  DEBUG_EXIT();
-  return 0;
-}
-
-antlrcpp::Any TypeCheckVisitor::visitType2(AslParser::Type2Context *ctx) {
-  DEBUG_ENTER();
-  if (ctx->INT()) {
-    TypesMgr::TypeId t = Types.createIntegerTy();
-    putTypeDecor(ctx, t);
-  }
-  else if(ctx->FLOAT()){
-    TypesMgr::TypeId t = Types.createFloatTy();
-    putTypeDecor(ctx, t);
-  }
-  else if(ctx->BOOL()){
-    TypesMgr::TypeId t = Types.createBooleanTy();
-    putTypeDecor(ctx, t);
-  }
-  else if(ctx->CHAR()){
-    TypesMgr::TypeId t = Types.createCharacterTy();
-    putTypeDecor(ctx, t);
-  }
-  DEBUG_EXIT();
-  return 0;
-}
 
 /**************************
 	END	VISIT EXPRESSIONS

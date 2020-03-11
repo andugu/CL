@@ -225,7 +225,8 @@ antlrcpp::Any CodeGenVisitor::visitWriteString(AslParser::WriteStringContext *ct
   return code;
 }
 
-antlrcpp::Any CodeGenVisitor::visitLeft_expr(AslParser::Left_exprContext *ctx) {
+// Originaly named visitLeftExpresion
+antlrcpp::Any CodeGenVisitor::visitIdentifier(AslParser::IdentifierContext *ctx) {
   DEBUG_ENTER();
   CodeAttribs && codAts = visit(ctx->ident());
   DEBUG_EXIT();

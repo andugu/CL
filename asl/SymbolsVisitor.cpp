@@ -91,7 +91,6 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
     std::vector<TypesMgr::TypeId> lParamsTy;
     std::vector<std::pair<std::string, TypesMgr::TypeId> > v = visit(ctx->parameters());
 
-
     for (unsigned int i = 0; i < v.size(); ++i){
       lParamsTy.push_back(v[i].second);
       Symbols.addParameter(v[i].first, v[i].second);

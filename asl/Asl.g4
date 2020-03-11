@@ -63,53 +63,59 @@ type2    : INT
         | CHAR
         ;
 
-type    : type2                          # BasicType
-        | ARRAY '[' INTVAL ']' OF type2  # ArrayType
+type    : type2                                                                 # BasicType
+        | ARRAY '[' INTVAL ']' OF type2                                         # ArrayType
         ;
 
 statements
         : (statement)*
         ;
 
+function_call
+        : ident '(' (expr (COMMA expr)*)? ')'                                   # procCall
+        ;
+
+array_access
+        : ident '[' expr ']'                                                    # arrayAccess
+        ;
+
 // The different types of instructions
 statement
           // Assignment
-        : left_expr ASSIGN expr ';'           # assignStmt
+        : left_expr ASSIGN expr ';'                                             # assignStmt
           // if-then-else statement (else is optional)
-        | IF expr THEN statements ENDIF       # ifStmt
-          // A function/procedure call has a list of arguments in parenthesis (possibly empty)
-        | ident '(' (ID (COMMA ID)*)? ')' ';' # procCall
+        | IF expr THEN statements (ELSE statements)? ENDIF                      # ifStmt
+          // A function/procedure call, with optional args
+        | function_call ';'                                                     # procStmt
           // While statement
-        | WHILE expr DO statements ENDWHILE   # whileStmt 
+        | WHILE expr DO statements ENDWHILE                                     # whileStmt 
           // Read a variable
-        | READ left_expr ';'                  # readStmt
+        | READ left_expr ';'                                                    # readStmt
           // Write an expression
-        | WRITE expr ';'                      # writeExpr
+        | WRITE expr ';'                                                        # writeExpr
           // Write a string
-        | WRITE STRING ';'                    # writeString
+        | WRITE STRING ';'                                                      # writeString
           // Return stmnt
-        | RETURN (expr)? ';'                  # returnStmt
+        | RETURN (expr)? ';'                                                    # returnStmt
         ;
 
 // Grammar for left expressions (l-values in C++)
 left_expr
-        : ident
+        : array_access                                                          # arrayAccessLeftValue
+        | ident                                                                 # identififier
         ;
 
 // Grammar for expressions with boolean, relational and aritmetic operators
-expr    : '(' expr ')'                                                          # parentesisExpr
-        | ident '[' INTVAL ']'                                                  # value
-        | NOT expr                                                              # singleRelational
-        | (PLUS | SUB) expr                                                     # negateNum
+expr    : '(' expr ')'                                                          # parenthesis
+        | array_access                                                          # arrayAccessExpr
+        | function_call                                                         # functionExpr
+        | op=(NOT | PLUS | SUB) expr                                            # unary
         | expr op=(MUL|DIV|MOD) expr                                            # arithmetic
         | expr op=(PLUS|SUB) expr                                               # arithmetic
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational
-        | expr op=AND expr                                                      # relational
-        | expr op=OR  expr                                                      # relational
-        | INTVAL                                                                # intValue
-        | BOOLVAL                                                               # boolValue
-        | FLOATVAL                                                              # floatValue
-        | CHARVAL                                                               # charValue
+        | expr op=AND expr                                                      # logical
+        | expr op=OR  expr                                                      # logical
+        | (INTVAL | BOOLVAL | FLOATVAL | CHARVAL)                               # value
         | ident                                                                 # exprIdent
         ;
 
@@ -120,17 +126,23 @@ ident   : ID
 /// Lexer Rules
 //////////////////////////////////////////////////
 
-// BOOLEAN OPERATORS
+// ASSIGN OPERATOR
 ASSIGN         : '='  ;
+
+// RELATIONAL OPERATORS
 EQUAL          : '==' ;
 NOTEQUAL       : '!=' ;
 GREATER        : '>'  ;
 GREATEREQUAL   : '>=' ;
 LESS           : '<'  ;
 LESSEQUAL      : '<=' ;
+
+// LOGICAL OPERATORS
 NOT            : 'not';
 AND            : 'and';
 OR             : 'or' ;
+
+// ARRAY
 OF             : 'of' ;
 
 // ARITHMETIC OPERATORS
@@ -140,11 +152,14 @@ DIV       : '/' ;
 MUL       : '*' ;
 MOD       : '%' ;
 
+// VARS | TYPES
 VAR       : 'var'     ;
 INT       : 'int'     ;
 FLOAT     : 'float'   ;
 BOOL      : 'bool'    ;
 CHAR      : 'char'    ;
+
+// CONTROL | INPUT | OUTPUT TOKENS
 IF        : 'if'      ;
 THEN      : 'then'    ;
 ELSE      : 'else'    ;
@@ -159,15 +174,16 @@ ARRAY     : 'array'   ;
 WHILE     : 'while'   ;
 DO        : 'do'      ;
 ENDWHILE  : 'endwhile';
-ID        : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ;
 
 // VALUES
 INTVAL    : ('0'..'9')+ ;
-FLOATVAL  : ('0'..'9')+ '.' ('0'..'9')* 
-          | '.'  ('0'..'9')+;
+FLOATVAL  : ('0'..'9')+ ('.' ('0'..'9')+)? ;
 BOOLVAL   : 'true' 
           | 'false';
 CHARVAL   : '\'' (ESC_SEQ | ~('\\'|'"')) '\'';
+
+// ID
+ID        : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ;
 
 // Strings (in quotes) with escape sequences
 STRING    : '"' ( ESC_SEQ | ~('\\'|'"') )* '"' ;

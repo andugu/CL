@@ -172,7 +172,7 @@ antlrcpp::Any TypeCheckVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx)
     return 0;
 }
 
-// TODO
+// DONE
 antlrcpp::Any TypeCheckVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   DEBUG_ENTER();
 
@@ -190,7 +190,7 @@ antlrcpp::Any TypeCheckVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   return 0;
 }
 
-// TODO
+// DONE
 antlrcpp::Any TypeCheckVisitor::visitWriteExpr(AslParser::WriteExprContext *ctx) {
   DEBUG_ENTER();
 
@@ -241,9 +241,11 @@ antlrcpp::Any TypeCheckVisitor::visitIdentifier(AslParser::IdentifierContext *ct
 // DONE
 antlrcpp::Any TypeCheckVisitor::visitParenthesis(AslParser::ParenthesisContext *ctx) {
     DEBUG_ENTER();
+
     visit(ctx->expr());
     TypesMgr::TypeId t = getTypeDecor(ctx->expr());
     putTypeDecor(ctx, t);
+
     DEBUG_EXIT();
     return 0;
 }
@@ -254,7 +256,7 @@ antlrcpp::Any TypeCheckVisitor::visitParenthesis(AslParser::ParenthesisContext *
 
 // unary
 
-// TODO
+// DONE
 antlrcpp::Any TypeCheckVisitor::visitArithmetic(AslParser::ArithmeticContext *ctx) {
     DEBUG_ENTER();
 
@@ -262,14 +264,25 @@ antlrcpp::Any TypeCheckVisitor::visitArithmetic(AslParser::ArithmeticContext *ct
     TypesMgr::TypeId t1 = getTypeDecor(ctx->expr(0));
     visit(ctx->expr(1));
     TypesMgr::TypeId t2 = getTypeDecor(ctx->expr(1));
+    std::string op = ctx->op->getText();
 
-    // If operator isnt %
-    if (((not Types.isErrorTy(t1)) and (not Types.isNumericTy(t1))) or
-        ((not Types.isErrorTy(t2)) and (not Types.isNumericTy(t2))))
-        Errors.incompatibleOperator(ctx->op);
+    // Mod only works with ints
+    if (op == "%")
+        if (((not Types.isErrorTy(t1)) and (not Types.isIntegerTy(t1))) or
+            ((not Types.isErrorTy(t2)) and (not Types.isIntegerTy(t2))))
+            Errors.incompatibleOperator(ctx->op);
 
-    // Add floats
-    TypesMgr::TypeId t = Types.createIntegerTy();
+    else
+        if (((not Types.isErrorTy(t1)) and (not Types.isNumericTy(t1))) or
+            ((not Types.isErrorTy(t2)) and (not Types.isNumericTy(t2))))
+            Errors.incompatibleOperator(ctx->op);
+
+    TypesMgr::TypeId t;
+    if (((not Types.isErrorTy(t1)) and (not Types.isErrorTy(t2))) and (Types.isFloatTy(t1) or Types.isFloatTy(t2)))
+        t = Types.createFloatTy();
+    else
+        t = Types.createIntegerTy();
+
     putTypeDecor(ctx, t);
     putIsLValueDecor(ctx, false);
 

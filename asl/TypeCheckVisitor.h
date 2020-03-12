@@ -60,32 +60,32 @@ public:
 		   TreeDecoration & Decorations,
 		   SemErrors      & Errors);
 
+
   // Methods to visit each kind of node:
-  antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
-  antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
-  // antlrcpp::Any visitDeclarations(AslParser::DeclarationsContext *ctx);
-  // antlrcpp::Any visitVariable_decl(AslParser::Variable_declContext *ctx);
-  // antlrcpp::Any visitType(AslParser::TypeContext *ctx);
-  antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
-  antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
-  antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
-  antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
-  antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
-  antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
-  // antlrcpp::Any visitWriteString(AslParser::WriteStringContext *ctx);
-  antlrcpp::Any visitLeft_expr(AslParser::Left_exprContext *ctx);
-  antlrcpp::Any visitExpr(AslParser::ExprContext *ctx);
-  antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx);
+    antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
+    antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
+// Types array i tal
+    antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
+    antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
+// Array access
+    antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
+    antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
+// Proc stmt
+    antlrcpp::Any visitWhileStmt(AslParser::WhileStmtContext *ctx);
+    antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
+    antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
+// Return stmt
+  antlrcpp::Any visitArrayAccessLeftValue(AslParser::ArrayAccessLeftValueContext *ctx);
+  antlrcpp::Any visitIdentifier(AslParser::IdentifierContext *ctx);
+  antlrcpp::Any visitParenthesis(AslParser::ParenthesisContext *ctx);
+// arrayAccessExpr
+// functionExpr
+// unary
   antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx);
-  antlrcpp::Any visitParentesisExpr(AslParser::ParentesisExprContext *ctx);
-  antlrcpp::Any visitNegateNum(AslParser::NegateNumContext *ctx);
   antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx);
-  antlrcpp::Any visitSingleRelational(AslParser::SingleRelationalContext *ctx);
-  antlrcpp::Any visitIntValue(AslParser::IntValueContext *ctx);
-  antlrcpp::Any visitFloatValue(AslParser::FloatValueContext *ctx);
-  antlrcpp::Any visitCharValue(AslParser::CharValueContext *ctx);
-  antlrcpp::Any visitBoolValue(AslParser::BoolValueContext *ctx);
+  antlrcpp::Any visitLogical(AslParser::LogicalContext *ctx);
   antlrcpp::Any visitValue(AslParser::ValueContext *ctx);
+  antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx);
   antlrcpp::Any visitIdent(AslParser::IdentContext *ctx);
 
 private:

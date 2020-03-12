@@ -64,10 +64,9 @@ public:
   // Methods to visit each kind of node:
     antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
     antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
-// Types array i tal
     antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
     antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
-// Array access
+    antlrcpp::Any visitArrayAccess(AslParser::ArrayAccessContext *ctx);
     antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
     antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
 // Proc stmt
@@ -78,9 +77,9 @@ public:
   antlrcpp::Any visitArrayAccessLeftValue(AslParser::ArrayAccessLeftValueContext *ctx);
   antlrcpp::Any visitIdentifier(AslParser::IdentifierContext *ctx);
   antlrcpp::Any visitParenthesis(AslParser::ParenthesisContext *ctx);
-// arrayAccessExpr
+  antlrcpp::Any visitArrayAccessExpr(AslParser::ArrayAccessExprContext *ctx);
 // functionExpr
-// unary
+  antlrcpp::Any visitUnary(AslParser::UnaryContext *ctx);
   antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx);
   antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx);
   antlrcpp::Any visitLogical(AslParser::LogicalContext *ctx);

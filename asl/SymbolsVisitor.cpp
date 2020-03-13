@@ -102,6 +102,8 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
     TypesMgr::TypeId tRet = getTypeDecor(ctx->ret());
     
     TypesMgr::TypeId tFunc = Types.createFunctionTy(lParamsTy, tRet);
+
+    putTypeDecor(ctx, tFunc);
     Symbols.addFunction(ident, tFunc);
   }
   DEBUG_EXIT();

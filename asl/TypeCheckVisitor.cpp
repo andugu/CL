@@ -254,17 +254,24 @@ antlrcpp::Any TypeCheckVisitor::visitReturnStmt(AslParser::ReturnStmtContext *ct
 
         TypesMgr::TypeId t_ret  = Types.getFuncReturnType(t_func);
 
+        // return ? and non-void
         if (ctx->expr() == nullptr and (not Types.isErrorTy(t_ret)) and (not Types.isVoidTy(t_ret))) {
             Errors.incompatibleReturn(ctx->RETURN());
         }
 
-        visit(ctx->expr());
-        TypesMgr::TypeId t_expr = getTypeDecor(ctx->expr());
+        if (ctx->expr() != nullptr) {
+            visit(ctx->expr());
+            TypesMgr::TypeId t_expr = getTypeDecor(ctx->expr());
 
-        if ((not Types.isErrorTy(t_expr)) and (not Types.isErrorTy(t_ret))
-        and (not Types.copyableTypes(t_ret, t_expr)))
-            Errors.incompatibleReturn(ctx->RETURN());
+            // return x and non compatible types or return x and void
+            if ((not Types.isErrorTy(t_expr)) and (not Types.isErrorTy(t_ret))
+                and (not Types.copyableTypes(t_ret, t_expr)))
+                Errors.incompatibleReturn(ctx->RETURN());
+        }
     }
+
+    else if (Types.isErrorTy(t_func))
+        Errors.incompatibleReturn(ctx->RETURN());
 
     DEBUG_EXIT();
     return 0;

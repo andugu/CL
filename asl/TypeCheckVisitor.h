@@ -60,25 +60,23 @@ public:
 		   TreeDecoration & Decorations,
 		   SemErrors      & Errors);
 
-
   // Methods to visit each kind of node:
-    antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
-    antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
-    antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
-    antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
-    antlrcpp::Any visitArrayAccess(AslParser::ArrayAccessContext *ctx);
-    antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
-    antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
-// Proc stmt
-    antlrcpp::Any visitWhileStmt(AslParser::WhileStmtContext *ctx);
-    antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
-    antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
-// Return stmt
+  antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
+  antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
+  antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
+  antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
+  antlrcpp::Any visitArrayAccess(AslParser::ArrayAccessContext *ctx);
+  antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
+  antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
+  antlrcpp::Any visitWhileStmt(AslParser::WhileStmtContext *ctx);
+  antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
+  antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
+  antlrcpp::Any visitReturnStmt(AslParser::ReturnStmtContext *ctx);
   antlrcpp::Any visitArrayAccessLeftValue(AslParser::ArrayAccessLeftValueContext *ctx);
   antlrcpp::Any visitIdentifier(AslParser::IdentifierContext *ctx);
   antlrcpp::Any visitParenthesis(AslParser::ParenthesisContext *ctx);
   antlrcpp::Any visitArrayAccessExpr(AslParser::ArrayAccessExprContext *ctx);
-// functionExpr
+  antlrcpp::Any visitFunctionExpr(AslParser::FunctionExprContext *ctx);
   antlrcpp::Any visitUnary(AslParser::UnaryContext *ctx);
   antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx);
   antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx);

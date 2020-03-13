@@ -79,9 +79,11 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
   std::string funcName = ctx->ID()->getText();
   SymTable::ScopeId sc = Symbols.pushNewScope(funcName);
   putScopeDecor(ctx, sc);
+  visit(ctx->parameters());
   visit(ctx->declarations());
   // Symbols.print();
   Symbols.popScope();
+
   std::string ident = ctx->ID()->getText();
   if (Symbols.findInCurrentScope(ident)) {
     Errors.declaredIdent(ctx->ID());
@@ -89,11 +91,10 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
   else {
     // visit and save param types
     std::vector<TypesMgr::TypeId> lParamsTy;
-    std::vector<std::pair<std::string, TypesMgr::TypeId> > v = visit(ctx->parameters());
 
-    for (unsigned int i = 0; i < v.size(); ++i){
-      lParamsTy.push_back(v[i].second);
-      Symbols.addParameter(v[i].first, v[i].second);
+    for (unsigned int i = 0; i < ctx->parameters()->type().size(); ++i){
+        TypesMgr::TypeId t = getTypeDecor(ctx->parameters()->type(i));
+        lParamsTy.push_back(t);
     }
 
     // visit and save return type
@@ -110,20 +111,18 @@ antlrcpp::Any SymbolsVisitor::visitFunction(AslParser::FunctionContext *ctx) {
 antlrcpp::Any SymbolsVisitor::visitParameters(AslParser::ParametersContext *ctx){
   DEBUG_ENTER();
 
-  std::vector<std::pair<std::string, TypesMgr::TypeId> > params;
-
   for (unsigned int i = 0; i < ctx->ID().size(); ++i){
 
+    visit(ctx->ID(i));
     std::string name = ctx->ID(i)->getText();
     visit(ctx->type(i));
-
     TypesMgr::TypeId t = getTypeDecor(ctx->type(i));
 
-    params.push_back(std::make_pair(name, t));
+    Symbols.addParameter(name, t);
   }
 
   DEBUG_EXIT();
-  return params;
+  return 0;
 }
 
 antlrcpp::Any SymbolsVisitor::visitRet(AslParser::RetContext *ctx){

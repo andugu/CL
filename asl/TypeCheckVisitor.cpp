@@ -59,8 +59,7 @@ TypeCheckVisitor::TypeCheckVisitor(TypesMgr       & Types,
 }
 
 // Methods to visit each kind of node:
-
-// DONE
+//
 antlrcpp::Any TypeCheckVisitor::visitProgram(AslParser::ProgramContext *ctx) {
   DEBUG_ENTER();
   SymTable::ScopeId sc = getScopeDecor(ctx);
@@ -75,6 +74,7 @@ antlrcpp::Any TypeCheckVisitor::visitProgram(AslParser::ProgramContext *ctx) {
   DEBUG_EXIT();
   return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitFunction(AslParser::FunctionContext *ctx) {
   DEBUG_ENTER();
   SymTable::ScopeId sc = getScopeDecor(ctx);
@@ -90,6 +90,7 @@ antlrcpp::Any TypeCheckVisitor::visitFunction(AslParser::FunctionContext *ctx) {
   DEBUG_EXIT();
   return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitStatements(AslParser::StatementsContext *ctx) {
   DEBUG_ENTER();
   visitChildren(ctx);
@@ -97,7 +98,6 @@ antlrcpp::Any TypeCheckVisitor::visitStatements(AslParser::StatementsContext *ct
   return 0;
 }
 
-// TODO
 antlrcpp::Any TypeCheckVisitor::visitProcCall(AslParser::ProcCallContext *ctx) {
     DEBUG_ENTER();
 
@@ -138,7 +138,6 @@ antlrcpp::Any TypeCheckVisitor::visitProcCall(AslParser::ProcCallContext *ctx) {
     return 0;
 }
 
-// DONE
 antlrcpp::Any TypeCheckVisitor::visitArrayAccess(AslParser::ArrayAccessContext *ctx){
     DEBUG_ENTER();
 
@@ -170,6 +169,7 @@ antlrcpp::Any TypeCheckVisitor::visitArrayAccess(AslParser::ArrayAccessContext *
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx) {
   DEBUG_ENTER();
 
@@ -187,6 +187,7 @@ antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ct
   DEBUG_EXIT();
   return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {
   DEBUG_ENTER();
 
@@ -203,6 +204,7 @@ antlrcpp::Any TypeCheckVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {
   DEBUG_EXIT();
   return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx){
     DEBUG_ENTER();
 
@@ -217,6 +219,7 @@ antlrcpp::Any TypeCheckVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx)
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   DEBUG_ENTER();
 
@@ -233,6 +236,7 @@ antlrcpp::Any TypeCheckVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   DEBUG_EXIT();
   return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitWriteExpr(AslParser::WriteExprContext *ctx) {
   DEBUG_ENTER();
 
@@ -245,6 +249,7 @@ antlrcpp::Any TypeCheckVisitor::visitWriteExpr(AslParser::WriteExprContext *ctx)
   DEBUG_EXIT();
   return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitReturnStmt(AslParser::ReturnStmtContext *ctx){
     DEBUG_ENTER();
 
@@ -276,6 +281,7 @@ antlrcpp::Any TypeCheckVisitor::visitReturnStmt(AslParser::ReturnStmtContext *ct
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitArrayAccessLeftValue(AslParser::ArrayAccessLeftValueContext *ctx){
     DEBUG_ENTER();
 
@@ -288,6 +294,7 @@ antlrcpp::Any TypeCheckVisitor::visitArrayAccessLeftValue(AslParser::ArrayAccess
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitIdentifier(AslParser::IdentifierContext *ctx){
     DEBUG_ENTER();
 
@@ -304,14 +311,11 @@ antlrcpp::Any TypeCheckVisitor::visitIdentifier(AslParser::IdentifierContext *ct
 }
 
 
-
 /**************************
 		VISIT EXPRESSIONS
 ***************************/
 
 
-
-// DONE
 antlrcpp::Any TypeCheckVisitor::visitParenthesis(AslParser::ParenthesisContext *ctx) {
     DEBUG_ENTER();
 
@@ -322,6 +326,7 @@ antlrcpp::Any TypeCheckVisitor::visitParenthesis(AslParser::ParenthesisContext *
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitArrayAccessExpr(AslParser::ArrayAccessExprContext *ctx) {
     DEBUG_ENTER();
 
@@ -332,6 +337,7 @@ antlrcpp::Any TypeCheckVisitor::visitArrayAccessExpr(AslParser::ArrayAccessExprC
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitFunctionExpr(AslParser::FunctionExprContext *ctx){
     DEBUG_ENTER();
 
@@ -353,6 +359,7 @@ antlrcpp::Any TypeCheckVisitor::visitFunctionExpr(AslParser::FunctionExprContext
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitUnary(AslParser::UnaryContext *ctx){
     DEBUG_ENTER();
 
@@ -377,6 +384,7 @@ antlrcpp::Any TypeCheckVisitor::visitUnary(AslParser::UnaryContext *ctx){
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitArithmetic(AslParser::ArithmeticContext *ctx) {
     DEBUG_ENTER();
 
@@ -413,6 +421,7 @@ antlrcpp::Any TypeCheckVisitor::visitArithmetic(AslParser::ArithmeticContext *ct
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitRelational(AslParser::RelationalContext *ctx) {
     DEBUG_ENTER();
 
@@ -433,6 +442,7 @@ antlrcpp::Any TypeCheckVisitor::visitRelational(AslParser::RelationalContext *ct
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitLogical(AslParser::LogicalContext *ctx){
     DEBUG_ENTER();
 
@@ -453,6 +463,7 @@ antlrcpp::Any TypeCheckVisitor::visitLogical(AslParser::LogicalContext *ctx){
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
     DEBUG_ENTER();
 
@@ -488,6 +499,7 @@ antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitExprIdent(AslParser::ExprIdentContext *ctx) {
     DEBUG_ENTER();
 
@@ -501,6 +513,7 @@ antlrcpp::Any TypeCheckVisitor::visitExprIdent(AslParser::ExprIdentContext *ctx)
     DEBUG_EXIT();
     return 0;
 }
+
 antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
   DEBUG_ENTER();
 
@@ -529,11 +542,9 @@ antlrcpp::Any TypeCheckVisitor::visitIdent(AslParser::IdentContext *ctx) {
 }
 
 
-
 /**************************
 	END	VISIT EXPRESSIONS
 ***************************/
-
 
 
 // Getters for the necessary tree node atributes:

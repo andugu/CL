@@ -170,6 +170,17 @@ antlrcpp::Any TypeCheckVisitor::visitArrayAccess(AslParser::ArrayAccessContext *
     return 0;
 }
 
+antlrcpp::Any TypeCheckVisitor::visitControlExpr(AslParser::ControlExprContext *ctx){
+  DEBUG_ENTER();
+
+  visit(ctx->expr());
+  TypesMgr::TypeId t = getTypeDecor(ctx->expr());
+  putTypeDecor(ctx, t);
+
+  DEBUG_EXIT();
+  return 0;
+}
+
 antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx) {
   DEBUG_ENTER();
 
@@ -218,6 +229,32 @@ antlrcpp::Any TypeCheckVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx)
 
     DEBUG_EXIT();
     return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitForStmt(AslParser::ForStmtContext *ctx){
+  DEBUG_ENTER();
+
+  visit(ctx->control());
+  for (auto i : ctx->expr()){
+    visit(i);
+  }
+  visit(ctx->statements());
+
+  if (ctx->expr().size() < 1 or ctx->expr().size() > 3)
+    Errors.numberOfRangeExpressions(ctx);
+
+  TypesMgr::TypeId t_control = getTypeDecor(ctx->control());
+  if (not Types.isErrorTy(t_control) and not Types.isIntegerTy(t_control))
+    Errors.forRequireIntegerVar(ctx->control());
+
+  for (auto i : ctx->expr()){
+    TypesMgr::TypeId t_param = getTypeDecor(i);
+    if (not Types.isErrorTy(t_param) and not Types.isIntegerTy(t_param))
+      Errors.forRequireIntegerExpr(i);
+  }
+
+  DEBUG_EXIT();
+  return 0;
 }
 
 antlrcpp::Any TypeCheckVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
@@ -274,9 +311,6 @@ antlrcpp::Any TypeCheckVisitor::visitReturnStmt(AslParser::ReturnStmtContext *ct
                 Errors.incompatibleReturn(ctx->RETURN());
         }
     }
-
-    else if (Types.isErrorTy(t_func))
-        Errors.incompatibleReturn(ctx->RETURN());
 
     DEBUG_EXIT();
     return 0;
@@ -459,6 +493,63 @@ antlrcpp::Any TypeCheckVisitor::visitLogical(AslParser::LogicalContext *ctx){
     TypesMgr::TypeId t = Types.createBooleanTy();
     putTypeDecor(ctx, t);
     putIsLValueDecor(ctx, false);
+
+    DEBUG_EXIT();
+    return 0;
+}
+
+antlrcpp::Any TypeCheckVisitor::visitMaximal(AslParser::MaximalContext *ctx) {
+    DEBUG_ENTER();
+
+    if (ctx->expr().size() < 2){
+      for (auto i : ctx->expr())
+        visit(i);
+      Errors.numberOfMaxArguments(ctx);
+    }
+
+    else {
+      TypesMgr::TypeId t = 0;
+      visit(ctx->expr(0));
+      TypesMgr::TypeId t_param_one = getTypeDecor(ctx->expr(0));
+      bool exists_float = false;
+      bool errors_exist = false;
+
+      for (auto i : ctx->expr()){
+          visit(i);
+          TypesMgr::TypeId t_param = getTypeDecor(i);
+
+          if (Types.isFloatTy(t_param))
+            exists_float = true;
+
+          if (not Types.isErrorTy(t_param_one) and not Types.isErrorTy(t_param)){
+            if (Types.isNumericTy(t_param_one) and not Types.isNumericTy(t_param)){
+              Errors.incompatibleMaxArguments(ctx);
+              errors_exist = true;
+            }
+            if (Types.isCharacterTy(t_param_one) and not Types.isCharacterTy(t_param)){
+              Errors.incompatibleMaxArguments(ctx);
+              errors_exist = true;
+            }
+          }
+      }
+
+      if (not errors_exist){
+        if (Types.isNumericTy(t_param_one)) {
+          if (exists_float)
+            t = Types.createFloatTy();
+          else
+            t = Types.createIntegerTy();
+        }
+        else if (Types.isCharacterTy(t_param_one))
+          t = Types.createCharacterTy();
+      }
+      else
+        t = Types.createErrorTy();
+
+      putTypeDecor(ctx, t);
+      putIsLValueDecor(ctx, false);
+
+    }
 
     DEBUG_EXIT();
     return 0;

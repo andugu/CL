@@ -105,6 +105,13 @@ public:
   //   ctx is the program node (grammar start symbol) 
   void noMainProperlyDeclared       (antlr4::ParserRuleContext *ctx);
 
+  void numberOfMaxArguments         (antlr4::ParserRuleContext *ctx);
+  void incompatibleMaxArguments     (antlr4::ParserRuleContext *ctx);
+  
+  void forRequireIntegerVar         (antlr4::ParserRuleContext *ctx);
+  void numberOfRangeExpressions     (antlr4::ParserRuleContext *ctx);
+  void forRequireIntegerExpr        (antlr4::ParserRuleContext *ctx);
+
 
 private:
 

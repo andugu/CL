@@ -79,6 +79,10 @@ array_access
         : ident '[' expr ']'                                                    # arrayAccess
         ;
 
+control
+        : expr                                                                  # controlExpr
+        ;
+
 // The different types of instructions
 statement
           // Assignment
@@ -89,6 +93,8 @@ statement
         | function_call ';'                                                     # procStmt
           // While statement
         | WHILE expr DO statements ENDWHILE                                     # whileStmt 
+          // For loop
+        | FOR control IN RANGE '(' (expr (COMMA expr)*)? ')' DO statements ENDFOR                            # forStmt
           // Read a variable
         | READ left_expr ';'                                                    # readStmt
           // Write an expression
@@ -115,6 +121,7 @@ expr    : '(' expr ')'                                                          
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational
         | expr op=AND expr                                                      # logical
         | expr op=OR  expr                                                      # logical
+        | op=MAX '(' (expr (COMMA expr)*)? ')'                                  # maximal
         | (INTVAL | BOOLVAL | FLOATVAL | CHARVAL)                               # value
         | ident                                                                 # exprIdent
         ;
@@ -136,6 +143,9 @@ GREATER        : '>'  ;
 GREATEREQUAL   : '>=' ;
 LESS           : '<'  ;
 LESSEQUAL      : '<=' ;
+
+// MAX OPERATOR
+MAX            : 'max';
 
 // LOGICAL OPERATORS
 NOT            : 'not';
@@ -174,6 +184,10 @@ ARRAY     : 'array'   ;
 WHILE     : 'while'   ;
 DO        : 'do'      ;
 ENDWHILE  : 'endwhile';
+FOR       : 'for'     ;
+ENDFOR    : 'endfor'  ;
+IN        : 'in'      ;
+RANGE     : 'range'   ;
 
 // VALUES
 INTVAL    : ('0'..'9')+ ;

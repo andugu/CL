@@ -82,7 +82,7 @@ void SemErrors::nonArrayInArrayAccess(antlr4::ParserRuleContext *ctx) {
 }
 
 void SemErrors::nonIntegerIndexInArrayAccess(antlr4::ParserRuleContext *ctx) {
-  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Array access witn non integer index.");
+  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Array access with non integer index.");
   ErrorList.push_back(error);
 }
 
@@ -142,6 +142,31 @@ void SemErrors::nonReferenceableExpression(antlr4::ParserRuleContext *ctx) {
 
 void SemErrors::noMainProperlyDeclared(antlr4::ParserRuleContext *ctx) {
   ErrorInfo error(ctx->getStop()->getLine(), ctx->getStop()->getCharPositionInLine(), "There is no 'main' function properly declared.");
+  ErrorList.push_back(error);
+}
+
+void SemErrors::numberOfMaxArguments(antlr4::ParserRuleContext *ctx) {
+  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Incorrect number of arguments in funtion 'max'.");
+  ErrorList.push_back(error);
+}
+
+void SemErrors::incompatibleMaxArguments(antlr4::ParserRuleContext *ctx) {
+  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Incompatible argument types in funtion 'max'.");
+  ErrorList.push_back(error);
+}
+
+void SemErrors::forRequireIntegerVar(antlr4::ParserRuleContext *ctx) {
+  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Integer type required in 'for' control variable.");
+  ErrorList.push_back(error);
+}
+
+void SemErrors::numberOfRangeExpressions(antlr4::ParserRuleContext *ctx) {
+  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Incorrect number of 'for-range' expressions.");
+  ErrorList.push_back(error);
+}
+
+void SemErrors::forRequireIntegerExpr(antlr4::ParserRuleContext *ctx) {
+  ErrorInfo error(ctx->getStart()->getLine(), ctx->getStart()->getCharPositionInLine(), "Integer types required in 'for-range' expressions.");
   ErrorList.push_back(error);
 }
 

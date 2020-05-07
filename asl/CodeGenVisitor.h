@@ -65,21 +65,37 @@ public:
   // Methods to visit each kind of node:
   antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
   antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
+  // parameters
+  // ret
   antlrcpp::Any visitDeclarations(AslParser::DeclarationsContext *ctx);
   antlrcpp::Any visitVariable_decl(AslParser::Variable_declContext *ctx);
-  // antlrcpp::Any visitType(AslParser::TypeContext *ctx);
+  // type2
+  // BasicType
+  // ArrayType
   antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
+  antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
+  // arrayAccess
+  // controlExpr
   antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
   antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
-  antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
+  // procStmt
+  // whileStmt 
   antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
   antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
   antlrcpp::Any visitWriteString(AslParser::WriteStringContext *ctx);
+  // returnStmt
+  // arrayAccessLeftValue
   antlrcpp::Any visitIdentifier(AslParser::IdentifierContext *ctx);
-  antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx);
+  antlrcpp::Any visitParenthesis(AslParser::ParenthesisContext *ctx);
+  // arrayAccessExpr
+  // functionExpr
+  // unary
   antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx);
   antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx);
+  // logical
+  // maximal
   antlrcpp::Any visitValue(AslParser::ValueContext *ctx);
+  antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx);
   antlrcpp::Any visitIdent(AslParser::IdentContext *ctx);
 
 private:

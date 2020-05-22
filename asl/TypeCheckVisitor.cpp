@@ -235,7 +235,7 @@ antlrcpp::Any TypeCheckVisitor::visitForStmt(AslParser::ForStmtContext *ctx){
   DEBUG_ENTER();
 
   visit(ctx->control());
-  for (auto i : ctx->expr()){
+  for (auto& i : ctx->expr()){
     visit(i);
   }
   visit(ctx->statements());
@@ -247,7 +247,7 @@ antlrcpp::Any TypeCheckVisitor::visitForStmt(AslParser::ForStmtContext *ctx){
   if (not Types.isErrorTy(t_control) and not Types.isIntegerTy(t_control))
     Errors.forRequireIntegerVar(ctx->control());
 
-  for (auto i : ctx->expr()){
+  for (auto const& i : ctx->expr()){
     TypesMgr::TypeId t_param = getTypeDecor(i);
     if (not Types.isErrorTy(t_param) and not Types.isIntegerTy(t_param))
       Errors.forRequireIntegerExpr(i);

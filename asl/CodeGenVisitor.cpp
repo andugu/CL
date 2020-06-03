@@ -138,10 +138,12 @@ antlrcpp::Any CodeGenVisitor::visitStatements(AslParser::StatementsContext *ctx)
 
 antlrcpp::Any CodeGenVisitor::visitProcCall(AslParser::ProcCallContext *ctx) {
   DEBUG_ENTER();
+
   instructionList code;
   // std::string name = ctx->ident()->ID()->getSymbol()->getText();
   std::string name = ctx->ident()->getText();
   code = instruction::CALL(name);
+
   DEBUG_EXIT();
   return code;
 }
@@ -186,8 +188,38 @@ antlrcpp::Any CodeGenVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {
   return code;
 }
 
-// procStmt
-// whileStmt 
+antlrcpp::Any CodeGenVisitor::visitProcStmt(AslParser::ProcStmtContext *ctx) {
+  DEBUG_ENTER();
+
+  CodeAttribs && codAts = visit(ctx->function_call());
+
+  DEBUG_EXIT();
+  return codAts;
+}
+
+antlrcpp::Any CodeGenVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx) {
+  DEBUG_ENTER();
+
+  instructionList code;
+
+  CodeAttribs && codAts1 = visit(ctx->expr());
+  std::string      addr1 = codAts1.addr;
+  instructionList  code1 = codAts1.code;
+
+  CodeAttribs && codAts2 = visit(ctx->statements());
+  std::string      addr2 = codAts2.addr;
+  instructionList  code2 = codAts2.code;
+
+  std::string      label = codeCounters.newLabelWHILE();
+  std::string labelStart = "WhileStmt"+label;
+  std::string   labelEnd = "endWhileStmt"+label;
+
+  code = instruction::LABEL(labelStart) || code1 || instruction::FJUMP(addr1, labelEnd) ||
+         code2 || instruction::UJUMP(labelStart) || instruction::LABEL(labelEnd);
+
+  DEBUG_EXIT();
+  return code;
+} 
 
 antlrcpp::Any CodeGenVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   DEBUG_ENTER();
@@ -195,10 +227,44 @@ antlrcpp::Any CodeGenVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   CodeAttribs     && codAts1 = visit(ctx->left_expr());
   std::string          addr1 = codAts1.addr;
   std::string          offs1 = codAts1.offs;
-  instructionList      code  = codAts1.code;
+  instructionList       code = codAts1.code;
   TypesMgr::TypeId      type = getTypeDecor(ctx->left_expr());
 
+  if (Types.isIntegerTy(type) or Types.isBooleanTy(type)){
+    // Identifier
+    if (offs1 == "")
+      code = code || instruction::READI(addr1);
 
+    // Array
+    else {
+      std::string temp = "%"+codeCounters.newTEMP();
+      code = code || instruction::READI(temp) || instruction::CLOAD(offs1, temp);
+    }
+  }
+
+  else if (Types.isFloatTy(type)){
+    // Identifier
+    if (offs1 == "")
+      code = code || instruction::READF(addr1);
+
+    // Array
+    else {
+      std::string temp = "%"+codeCounters.newTEMP();
+      code = code || instruction::READF(temp) || instruction::CLOAD(offs1, temp);
+    }
+  }
+
+  else if (Types.isCharacterTy(type)){
+    // Identifier
+    if (offs1 == "")
+      code = code || instruction::READC(addr1);
+
+    // Array
+    else {
+      std::string temp = "%"+codeCounters.newTEMP();
+      code = code || instruction::READC(temp) || instruction::CLOAD(offs1, temp);
+    }
+  }
 
   DEBUG_EXIT();
   return code;

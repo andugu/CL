@@ -78,8 +78,8 @@ public:
   // controlExpr
   antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
   antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
-  // procStmt
-  // whileStmt 
+  antlrcpp::Any visitProcStmt(AslParser::ProcStmtContext *ctx);
+  antlrcpp::Any visitWhileStmt(AslParser::WhileStmtContext *ctx);
   antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
   antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
   antlrcpp::Any visitWriteString(AslParser::WriteStringContext *ctx);

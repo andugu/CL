@@ -266,8 +266,13 @@ antlrcpp::Any CodeGenVisitor::visitArrayAccess(AslParser::ArrayAccessContext *ct
 
   code = code || instruction::LOADX(content, addr_base, offs);
 
-  code = code || instruction::ADD(addr_element, addr_base, offs);
+  if (Symbols.isParameterClass(name))
+    code = code || instruction::ADD(addr_element, addr_base, offs);
 
+  else
+    code = code || instruction::ALOAD(addr_element, name)
+           || instruction::ADD(addr_element, addr_element, offs);
+    
   // addr = valor, offs = @base + offset, code AS IS
   CodeAttribs codAts(content, addr_element, code);
 
@@ -293,10 +298,13 @@ antlrcpp::Any CodeGenVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx)
   std::string          addr1 = codAts1.addr;
   std::string          offs1 = codAts1.offs;
   instructionList &    code1 = codAts1.code;
+  TypesMgr::TypeId     type1 = getTypeDecor(ctx->left_expr());
 
   CodeAttribs     && codAts2 = visit(ctx->expr());
   std::string          addr2 = codAts2.addr;
+  std::string          offs2 = codAts2.offs;
   instructionList &    code2 = codAts2.code;
+  TypesMgr::TypeId     type2 = getTypeDecor(ctx->expr());
 
   // Identifier
   if (offs1 == "")
@@ -364,8 +372,7 @@ antlrcpp::Any CodeGenVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx) {
   std::string      addr1 = codAts1.addr;
   instructionList  code1 = codAts1.code;
 
-  CodeAttribs && codAts2 = visit(ctx->statements());
-  instructionList  code2 = codAts2.code;
+  instructionList  code2 = visit(ctx->statements());
 
   std::string      label = codeCounters.newLabelWHILE();
   std::string labelStart = "WhileStmt"+label;

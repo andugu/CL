@@ -66,11 +66,11 @@ public:
   antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
   antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
   antlrcpp::Any visitArrayAccess(AslParser::ArrayAccessContext *ctx);
-  antlrcpp::Any visitControlExpr(AslParser::ControlExprContext *ctx);
+  // antlrcpp::Any visitControlExpr(AslParser::ControlExprContext *ctx);
   antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
   antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
   antlrcpp::Any visitWhileStmt(AslParser::WhileStmtContext *ctx);
-  antlrcpp::Any visitForStmt(AslParser::ForStmtContext *ctx);
+  // antlrcpp::Any visitForStmt(AslParser::ForStmtContext *ctx);
   antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
   antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
   antlrcpp::Any visitReturnStmt(AslParser::ReturnStmtContext *ctx);
@@ -83,7 +83,7 @@ public:
   antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx);
   antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx);
   antlrcpp::Any visitLogical(AslParser::LogicalContext *ctx);
-  antlrcpp::Any visitMaximal(AslParser::MaximalContext *ctx);
+  // antlrcpp::Any visitMaximal(AslParser::MaximalContext *ctx);
   antlrcpp::Any visitValue(AslParser::ValueContext *ctx);
   antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx);
   antlrcpp::Any visitIdent(AslParser::IdentContext *ctx);

@@ -275,14 +275,14 @@ antlrcpp::Any CodeGenVisitor::visitArrayAccess(AslParser::ArrayAccessContext *ct
   return codAts;
 }
 
-antlrcpp::Any CodeGenVisitor::visitControlExpr(AslParser::ControlExprContext *ctx) {
+/*antlrcpp::Any CodeGenVisitor::visitControlExpr(AslParser::ControlExprContext *ctx) {
   DEBUG_ENTER();
 
   CodeAttribs codAts = visit(ctx->expr());
 
   DEBUG_EXIT();
   return codAts;
-}
+}*/
 
 antlrcpp::Any CodeGenVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx) {
   DEBUG_ENTER();
@@ -764,8 +764,6 @@ antlrcpp::Any CodeGenVisitor::visitLogical(AslParser::LogicalContext *ctx) {
   DEBUG_EXIT();
   return codAts;
 }
-
-// maximal
 
 antlrcpp::Any CodeGenVisitor::visitValue(AslParser::ValueContext *ctx) {
   DEBUG_ENTER();

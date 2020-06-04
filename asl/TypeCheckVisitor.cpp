@@ -170,7 +170,7 @@ antlrcpp::Any TypeCheckVisitor::visitArrayAccess(AslParser::ArrayAccessContext *
     return 0;
 }
 
-antlrcpp::Any TypeCheckVisitor::visitControlExpr(AslParser::ControlExprContext *ctx){
+/*antlrcpp::Any TypeCheckVisitor::visitControlExpr(AslParser::ControlExprContext *ctx){
   DEBUG_ENTER();
 
   visit(ctx->expr());
@@ -179,7 +179,7 @@ antlrcpp::Any TypeCheckVisitor::visitControlExpr(AslParser::ControlExprContext *
 
   DEBUG_EXIT();
   return 0;
-}
+}*/
 
 antlrcpp::Any TypeCheckVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx) {
   DEBUG_ENTER();
@@ -231,7 +231,7 @@ antlrcpp::Any TypeCheckVisitor::visitWhileStmt(AslParser::WhileStmtContext *ctx)
     return 0;
 }
 
-antlrcpp::Any TypeCheckVisitor::visitForStmt(AslParser::ForStmtContext *ctx){
+/*antlrcpp::Any TypeCheckVisitor::visitForStmt(AslParser::ForStmtContext *ctx){
   DEBUG_ENTER();
 
   visit(ctx->control());
@@ -255,7 +255,7 @@ antlrcpp::Any TypeCheckVisitor::visitForStmt(AslParser::ForStmtContext *ctx){
 
   DEBUG_EXIT();
   return 0;
-}
+}*/
 
 antlrcpp::Any TypeCheckVisitor::visitReadStmt(AslParser::ReadStmtContext *ctx) {
   DEBUG_ENTER();
@@ -498,7 +498,7 @@ antlrcpp::Any TypeCheckVisitor::visitLogical(AslParser::LogicalContext *ctx){
     return 0;
 }
 
-antlrcpp::Any TypeCheckVisitor::visitMaximal(AslParser::MaximalContext *ctx) {
+/*antlrcpp::Any TypeCheckVisitor::visitMaximal(AslParser::MaximalContext *ctx) {
     DEBUG_ENTER();
 
     if (ctx->expr().size() < 2){
@@ -553,7 +553,7 @@ antlrcpp::Any TypeCheckVisitor::visitMaximal(AslParser::MaximalContext *ctx) {
 
     DEBUG_EXIT();
     return 0;
-}
+}*/
 
 antlrcpp::Any TypeCheckVisitor::visitValue(AslParser::ValueContext *ctx) {
     DEBUG_ENTER();

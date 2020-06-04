@@ -79,9 +79,9 @@ array_access
         : ident '[' expr ']'                                                    # arrayAccess
         ;
 
-control
-        : expr                                                                  # controlExpr
-        ;
+//control
+//        : expr                                                                  # controlExpr
+//        ;
 
 // The different types of instructions
 statement
@@ -94,7 +94,7 @@ statement
           // While statement
         | WHILE expr DO statements ENDWHILE                                     # whileStmt 
           // For loop
-        | FOR control IN RANGE '('(expr (COMMA expr)*)?')' DO statements ENDFOR # forStmt
+      //| FOR control IN RANGE '('(expr (COMMA expr)*)?')' DO statements ENDFOR # forStmt
           // Read a variable
         | READ left_expr ';'                                                    # readStmt
           // Write an expression
@@ -121,7 +121,7 @@ expr    : '(' expr ')'                                                          
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational
         | expr op=AND expr                                                      # logical
         | expr op=OR  expr                                                      # logical
-        | op=MAX '(' (expr (COMMA expr)*)? ')'                                  # maximal
+      //| op=MAX '(' (expr (COMMA expr)*)? ')'                                  # maximal
         | (INTVAL | BOOLVAL | FLOATVAL | CHARVAL)                               # value
         | ident                                                                 # exprIdent
         ;
@@ -145,7 +145,7 @@ LESS           : '<'  ;
 LESSEQUAL      : '<=' ;
 
 // MAX OPERATOR
-MAX            : 'max';
+//MAX            : 'max';
 
 // LOGICAL OPERATORS
 NOT            : 'not';
@@ -184,10 +184,10 @@ ARRAY     : 'array'   ;
 WHILE     : 'while'   ;
 DO        : 'do'      ;
 ENDWHILE  : 'endwhile';
-FOR       : 'for'     ;
-ENDFOR    : 'endfor'  ;
-IN        : 'in'      ;
-RANGE     : 'range'   ;
+//FOR       : 'for'     ;
+//ENDFOR    : 'endfor'  ;
+//IN        : 'in'      ;
+//RANGE     : 'range'   ;
 
 // VALUES
 INTVAL    : ('0'..'9')+ ;

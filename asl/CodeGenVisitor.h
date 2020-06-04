@@ -117,7 +117,7 @@ private:
   // generate the three attributes. Others, like statements, only
   // generate the instruction list.
   class CodeAttribs {
-    
+
   public:
     // Constructors
     CodeAttribs(const std::string & addr,
@@ -136,5 +136,5 @@ private:
     instructionList code;
 
   };  // class CodeAttribs
-  
+
 };  // class CodeGenVisitor

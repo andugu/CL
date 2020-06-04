@@ -128,7 +128,7 @@ antlrcpp::Any CodeGenVisitor::visitRet(AslParser::RetContext *ctx) {
   DEBUG_ENTER();
 
   DEBUG_EXIT();
-  return ctx->type() == nullptr;
+  return ctx->type() != nullptr;
 }
 
 antlrcpp::Any CodeGenVisitor::visitDeclarations(AslParser::DeclarationsContext *ctx) {

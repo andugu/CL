@@ -40,7 +40,7 @@
 #include <cstddef>    // std::size_t
 
 // uncomment the following line to enable debugging messages with DEBUG*
-#define DEBUG_BUILD
+// #define DEBUG_BUILD
 #include "../common/debug.h"
 
 // using namespace std;
@@ -240,28 +240,39 @@ antlrcpp::Any CodeGenVisitor::visitProcCall(AslParser::ProcCallContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitArrayAccess(AslParser::ArrayAccessContext *ctx){
   DEBUG_ENTER();
 
-      ident '[' expr ']'
-
-  CodeAttribs && codAts1 = visit(ctx->ident());
-  std::string       name = codAts1.addr;
-  std::string      addr1 = name;
+  // If Parameter -> *name = @base_array
+  // If Var       ->  name = @base_array
+  CodeAttribs &&   codAts1 = visit(ctx->ident());
+  std::string         name = codAts1.addr;
+  // addr_base = @base
+  std::string    addr_base = name;
 
   CodeAttribs && codAts2 = visit(ctx->expr());
-  std::string      addr2 = codAts2.addr;
+  // offs = offset
+  std::string      offs = codAts2.addr;
   instructionList   code = codAts2.code;
 
-  // Parameter -> Load @pointer
+  // addr_element = @base + offset
+  std::string addr_element = "%"+codeCounters.newTEMP();
+
+  // content = *(@base + offset)
+  std::string content = "%"+codeCounters.newTEMP();
+
+  // Parameter -> Load @base
   if (Symbols.isParameterClass(name)){
-    addr1 = "%"+codeCounters.newTEMP();
-    code = code || instruction::LOAD(addr1, name);
+    addr_base = "%"+codeCounters.newTEMP();
+    code = code || instruction::LOAD(addr_base, name);
   }
 
-  else
-    addr1 = name;
+  code = code || instruction::LOADX(content, addr_base, offs);
 
+  code = code || instruction::ADD(addr_element, addr_base, offs);
+
+  // addr = valor, offs = @base + offset, code AS IS
+  CodeAttribs codAts(content, addr_element, code);
 
   DEBUG_EXIT();
-  return algo;
+  return codAts;
 }
 
 antlrcpp::Any CodeGenVisitor::visitControlExpr(AslParser::ControlExprContext *ctx) {

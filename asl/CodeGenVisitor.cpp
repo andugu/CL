@@ -322,7 +322,7 @@ antlrcpp::Any CodeGenVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {
   instructionList      code2 = visit(ctx->statements(0));
 
   std::string label = codeCounters.newLabelIF();
-  std::string labelEnd = "endIf"+label;
+  std::string labelEnd = "endif"+label;
 
   // Only IF
   if (ctx->statements().size() < 2)
@@ -333,7 +333,7 @@ antlrcpp::Any CodeGenVisitor::visitIfStmt(AslParser::IfStmtContext *ctx) {
   else {
     instructionList    code3 = visit(ctx->statements(1));
 
-    std::string labelElse = "Else"+label;
+    std::string labelElse = "else"+label;
 
     code = code1 || instruction::FJUMP(addr1, labelElse) ||
            code2 || instruction::UJUMP(labelEnd)         ||
@@ -560,15 +560,15 @@ antlrcpp::Any CodeGenVisitor::visitUnary(AslParser::UnaryContext *ctx) {
 
   std::string temp;
 
-  if (ctx->op->getText() == "NOT") {
+  if (ctx->op->getText() == "not") {
     temp = "%"+codeCounters.newTEMP();
     code = code || instruction::NOT(temp, addr);
   }
 
-  else if (ctx->op->getText() == "PLUS")
+  else if (ctx->op->getText() == "+")
     temp = addr;
 
-  else if (ctx->op->getText() == "SUB") {
+  else if (ctx->op->getText() == "-") {
     temp = "%"+codeCounters.newTEMP();
     if (Types.isFloatTy(type))
       code = code || instruction::FNEG(temp, addr);
@@ -613,27 +613,27 @@ antlrcpp::Any CodeGenVisitor::visitArithmetic(AslParser::ArithmeticContext *ctx)
   }
 
   if (Types.isFloatTy(type1) or Types.isFloatTy(type2)){
-    if (ctx->op->getText() == "MUL")
+    if (ctx->op->getText() == "*")
       code = code || instruction::FMUL(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "DIV")
+    else if (ctx->op->getText() == "/")
       code = code || instruction::FDIV(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "PLUS")
+    else if (ctx->op->getText() == "+")
       code = code || instruction::FADD(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "SUB")
+    else if (ctx->op->getText() == "-")
       code = code || instruction::FSUB(temp, addr1, addr2);
   }
 
   else {
-    if (ctx->op->getText() == "MUL")
+    if (ctx->op->getText() == "*")
       code = code || instruction::MUL(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "DIV")
+    else if (ctx->op->getText() == "/")
       code = code || instruction::DIV(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "MOD"){
+    else if (ctx->op->getText() == "%"){
       std::string temp1 = "%"+codeCounters.newTEMP();
       std::string temp2 = "%"+codeCounters.newTEMP();
       code = code || instruction::DIV(temp1, addr1, addr2);
@@ -641,10 +641,10 @@ antlrcpp::Any CodeGenVisitor::visitArithmetic(AslParser::ArithmeticContext *ctx)
       code = code || instruction::SUB(temp, addr1, temp2);
     }
 
-    else if (ctx->op->getText() == "PLUS")
+    else if (ctx->op->getText() == "+")
       code = code || instruction::ADD(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "SUB")
+    else if (ctx->op->getText() == "-")
       code = code || instruction::SUB(temp, addr1, addr2);
   }
 
@@ -685,50 +685,50 @@ antlrcpp::Any CodeGenVisitor::visitRelational(AslParser::RelationalContext *ctx)
   }
 
   if (Types.isFloatTy(type1) or Types.isFloatTy(type2)){
-    if (ctx->op->getText() == "EQUAL")
+    if (ctx->op->getText() == "==")
       code = code || instruction::FEQ(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "NOTEQUAL")
+    else if (ctx->op->getText() == "!=")
       code = code || instruction::FEQ(temp, addr1, addr2) || instruction::NOT(temp, temp);
 
-    else if (ctx->op->getText() == "LESS")
+    else if (ctx->op->getText() == "<")
       code = code || instruction::FLT(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "LESSEQUAL")
+    else if (ctx->op->getText() == "<=")
       code = code || instruction::FLE(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "GREATER")
+    else if (ctx->op->getText() == ">")
       code = code || instruction::FLE(temp, addr1, addr2) || instruction::NOT(temp, temp);
 
-    else if (ctx->op->getText() == "GREATEREQUAL")
+    else if (ctx->op->getText() == ">=")
       code = code || instruction::FLT(temp, addr1, addr2) || instruction::NOT(temp, temp);
   }
 
   else if (Types.isBooleanTy(type1) and Types.isBooleanTy(type2)){
-    if (ctx->op->getText() == "EQUAL")
+    if (ctx->op->getText() == "==")
       code = code || instruction::EQ(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "NOTEQUAL")
+    else if (ctx->op->getText() == "!=")
       code = code || instruction::EQ(temp, addr1, addr2) || instruction::NOT(temp, temp);
   }
 
   else {
-    if (ctx->op->getText() == "EQUAL")
+    if (ctx->op->getText() == "==")
       code = code || instruction::EQ(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "NOTEQUAL")
+    else if (ctx->op->getText() == "!=")
       code = code || instruction::EQ(temp, addr1, addr2) || instruction::NOT(temp, temp);
 
-    else if (ctx->op->getText() == "LESS")
+    else if (ctx->op->getText() == "<")
       code = code || instruction::LT(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "LESSEQUAL")
+    else if (ctx->op->getText() == "<=")
       code = code || instruction::LE(temp, addr1, addr2);
 
-    else if (ctx->op->getText() == "GREATER")
+    else if (ctx->op->getText() == ">")
       code = code || instruction::LE(temp, addr1, addr2) || instruction::NOT(temp, temp);
 
-    else if (ctx->op->getText() == "GREATEREQUAL")
+    else if (ctx->op->getText() == ">=")
       code = code || instruction::LT(temp, addr1, addr2) || instruction::NOT(temp, temp);
   }
 
@@ -753,10 +753,10 @@ antlrcpp::Any CodeGenVisitor::visitLogical(AslParser::LogicalContext *ctx) {
 
   std::string temp = "%"+codeCounters.newTEMP();
 
-  if (ctx->op->getText() == "AND")
+  if (ctx->op->getText() == "and")
     code = code || instruction::AND(temp, addr1, addr2);
 
-  else if (ctx->op->getText() == "OR")
+  else if (ctx->op->getText() == "or")
     code = code || instruction::OR(temp, addr1, addr2);
 
   CodeAttribs codAts(temp, "", code);

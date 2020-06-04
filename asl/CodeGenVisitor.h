@@ -65,34 +65,31 @@ public:
   // Methods to visit each kind of node:
   antlrcpp::Any visitProgram(AslParser::ProgramContext *ctx);
   antlrcpp::Any visitFunction(AslParser::FunctionContext *ctx);
-  // parameters
-  // ret
+  antlrcpp::Any visitParameters(AslParser::ParametersContext *ctx);
+  antlrcpp::Any visitRet(AslParser::RetContext *ctx);
   antlrcpp::Any visitDeclarations(AslParser::DeclarationsContext *ctx);
   antlrcpp::Any visitVariable_decl(AslParser::Variable_declContext *ctx);
-  // type2
-  // BasicType
-  // ArrayType
   antlrcpp::Any visitStatements(AslParser::StatementsContext *ctx);
   antlrcpp::Any visitProcCall(AslParser::ProcCallContext *ctx);
   // arrayAccess
-  // controlExpr
+  antlrcpp::Any visitControlExpr(AslParser::ControlExprContext *ctx);
   antlrcpp::Any visitAssignStmt(AslParser::AssignStmtContext *ctx);
   antlrcpp::Any visitIfStmt(AslParser::IfStmtContext *ctx);
-  // procStmt
-  // whileStmt 
+  antlrcpp::Any visitProcStmt(AslParser::ProcStmtContext *ctx);
+  antlrcpp::Any visitWhileStmt(AslParser::WhileStmtContext *ctx);
   antlrcpp::Any visitReadStmt(AslParser::ReadStmtContext *ctx);
   antlrcpp::Any visitWriteExpr(AslParser::WriteExprContext *ctx);
   antlrcpp::Any visitWriteString(AslParser::WriteStringContext *ctx);
-  // returnStmt
-  // arrayAccessLeftValue
+  antlrcpp::Any visitReturnStmt(AslParser::ReturnStmtContext *ctx);
+  antlrcpp::Any visitArrayAccessLeftValue(AslParser::ArrayAccessLeftValueContext *ctx);
   antlrcpp::Any visitIdentifier(AslParser::IdentifierContext *ctx);
   antlrcpp::Any visitParenthesis(AslParser::ParenthesisContext *ctx);
-  // arrayAccessExpr
-  // functionExpr
-  // unary
+  antlrcpp::Any visitArrayAccessExpr(AslParser::ArrayAccessExprContext *ctx);
+  antlrcpp::Any visitFunctionExpr(AslParser::FunctionExprContext *ctx);
+  antlrcpp::Any visitUnary(AslParser::UnaryContext *ctx);
   antlrcpp::Any visitArithmetic(AslParser::ArithmeticContext *ctx);
   antlrcpp::Any visitRelational(AslParser::RelationalContext *ctx);
-  // logical
+  antlrcpp::Any visitLogical(AslParser::LogicalContext *ctx);
   // maximal
   antlrcpp::Any visitValue(AslParser::ValueContext *ctx);
   antlrcpp::Any visitExprIdent(AslParser::ExprIdentContext *ctx);

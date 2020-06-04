@@ -94,7 +94,7 @@ statement
           // While statement
         | WHILE expr DO statements ENDWHILE                                     # whileStmt 
           // For loop
-        | FOR control IN RANGE '(' (expr (COMMA expr)*)? ')' DO statements ENDFOR                            # forStmt
+        | FOR control IN RANGE '('(expr (COMMA expr)*)?')' DO statements ENDFOR # forStmt
           // Read a variable
         | READ left_expr ';'                                                    # readStmt
           // Write an expression
@@ -115,7 +115,7 @@ left_expr
 expr    : '(' expr ')'                                                          # parenthesis
         | array_access                                                          # arrayAccessExpr
         | function_call                                                         # functionExpr
-        | op=(NOT | PLUS | SUB) expr                                            # unary
+        | op=(NOT|PLUS|SUB) expr                                                # unary
         | expr op=(MUL|DIV|MOD) expr                                            # arithmetic
         | expr op=(PLUS|SUB) expr                                               # arithmetic
         | expr op=(EQUAL|NOTEQUAL|LESS|LESSEQUAL|GREATER|GREATEREQUAL) expr     # relational

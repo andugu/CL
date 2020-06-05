@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/bash
 
 echo "BEGIN els meus putos tests"
 for f in ../examples/jp_genc_*.asl; do

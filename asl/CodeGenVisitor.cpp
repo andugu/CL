@@ -272,7 +272,7 @@ antlrcpp::Any CodeGenVisitor::visitArrayAccess(AslParser::ArrayAccessContext *ct
   else
     code = code || instruction::ALOAD(addr_element, name)
            || instruction::ADD(addr_element, addr_element, offs);
-    
+
   // addr = valor, offs = @base + offset, code AS IS
   CodeAttribs codAts(content, addr_element, code);
 
@@ -298,33 +298,41 @@ antlrcpp::Any CodeGenVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx)
   std::string       addr1 = codAts1.addr;
   std::string       offs1 = codAts1.offs;
   instructionList   code1 = codAts1.code;
-  //TypesMgr::TypeId  type1 = getTypeDecor(ctx->left_expr());
+  TypesMgr::TypeId  type1 = getTypeDecor(ctx->left_expr());
 
   CodeAttribs     codAts2 = visit(ctx->expr());
   std::string       addr2 = codAts2.addr;
   std::string       offs2 = codAts2.offs;
   instructionList   code2 = codAts2.code;
-  //TypesMgr::TypeId  type2 = getTypeDecor(ctx->expr());
+  TypesMgr::TypeId  type2 = getTypeDecor(ctx->expr());
 
-  /*
+
   if (offs1 == "" and Types.isArrayTy(type1) and Types.isArrayTy(type2)){
     std::string temp1 = "%"+codeCounters.newTEMP();
-
+    std::string loop_iterator = "%"+codeCounters.newTEMP();
+    std::string array_left, array_right;
+    array_left = addr1;
+    array_right = addr2;
     int arraySize = Types.getArraySize(type1);
-
     code = code1 || code2;
 
+    if(Symbols.isParameterClass(addr1)){
+        array_left = "%"+codeCounters.newTEMP();
+        code = code || instruction::LOAD(array_left, addr1);
+    }
+    if(Symbols.isParameterClass(addr2)){
+        array_right = "%"+codeCounters.newTEMP();
+        code = code || instruction::LOAD(array_right, addr2);
+    }
     for (int i = 0; i < arraySize; ++i){
-      std::string temp2 = "%"+codeCounters.newTEMP();
-      code = code || instruction::ILOAD(temp2, std::to_string(i));
-      code = code || instruction::LOADX(temp1, addr2, temp2)
-             || instruction::XLOAD(addr1, temp2, temp1);
+
+      code = code || instruction::ILOAD(loop_iterator, std::to_string(i));
+      code = code || instruction::LOADX(temp1, array_right, loop_iterator)
+             || instruction::XLOAD(array_left, loop_iterator, temp1);
     }
   }
-  */
-
   // Identifier
-  if (offs1 == "")
+  else if (offs1 == "")
     code = code1 || code2 || instruction::LOAD(addr1, addr2);
 
   // Array

@@ -294,17 +294,34 @@ antlrcpp::Any CodeGenVisitor::visitAssignStmt(AslParser::AssignStmtContext *ctx)
 
   instructionList code;
 
-  CodeAttribs     && codAts1 = visit(ctx->left_expr());
-  std::string          addr1 = codAts1.addr;
-  std::string          offs1 = codAts1.offs;
-  instructionList &    code1 = codAts1.code;
-  TypesMgr::TypeId     type1 = getTypeDecor(ctx->left_expr());
+  CodeAttribs     codAts1 = visit(ctx->left_expr());
+  std::string       addr1 = codAts1.addr;
+  std::string       offs1 = codAts1.offs;
+  instructionList   code1 = codAts1.code;
+  //TypesMgr::TypeId  type1 = getTypeDecor(ctx->left_expr());
 
-  CodeAttribs     && codAts2 = visit(ctx->expr());
-  std::string          addr2 = codAts2.addr;
-  std::string          offs2 = codAts2.offs;
-  instructionList &    code2 = codAts2.code;
-  TypesMgr::TypeId     type2 = getTypeDecor(ctx->expr());
+  CodeAttribs     codAts2 = visit(ctx->expr());
+  std::string       addr2 = codAts2.addr;
+  std::string       offs2 = codAts2.offs;
+  instructionList   code2 = codAts2.code;
+  //TypesMgr::TypeId  type2 = getTypeDecor(ctx->expr());
+
+  /*
+  if (offs1 == "" and Types.isArrayTy(type1) and Types.isArrayTy(type2)){
+    std::string temp1 = "%"+codeCounters.newTEMP();
+
+    int arraySize = Types.getArraySize(type1);
+
+    code = code1 || code2;
+
+    for (int i = 0; i < arraySize; ++i){
+      std::string temp2 = "%"+codeCounters.newTEMP();
+      code = code || instruction::ILOAD(temp2, std::to_string(i));
+      code = code || instruction::LOADX(temp1, addr2, temp2)
+             || instruction::XLOAD(addr1, temp2, temp1);
+    }
+  }
+  */
 
   // Identifier
   if (offs1 == "")

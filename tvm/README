@@ -1,0 +1,11 @@
+
+ This package contains tVM virtual machine executable for macOS
+
+ [Linux users do not need this package: tVM for linux is included in the basic CL-lab package]
+
+  Move the tvm binary to the 'tvm' folder in your basic CL lab project directory.
+
+ TEST:
+
+    ./tvm examples/floats.t
+    

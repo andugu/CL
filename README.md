@@ -1,4 +1,4 @@
-# CL
+# Pràctica de Compiladors
 
 A compiler of ASL (A Simple Language), an imperative high-level programming language with the basic data types (integer, boolean, character, float), usual control structures (if-then-else, while, functions, …), and arrays (one-dimension, basic type elements). For more details about the target language visit: https://www.cs.upc.edu/~padro/CL/practica/asl.html
 
